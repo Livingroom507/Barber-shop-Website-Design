@@ -5,7 +5,7 @@
 }
 #banner{
     /* Google Drive link for background image - consider hosting locally for better performance and reliability. */
-    background: linear-gradient(rgba(0,0,0,0.5),#87996f),url(https://drive.google.com/uc?id=1ZAU9HED74IIGabz1ZtwHCjJtzj9jY6ri);
+    background: linear-gradient(rgba(0,0,0,0.5),#87996f),url(images/Banner-1.png);
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -67,7 +67,7 @@
     right: -250px;
     top: 0;
     /* Changed background from 'none' to a color for better visibility of the menu */
-    background: #333; /* Example dark background */
+    background: #c7a910ff; /* Example dark background */
     z-index: 2;
     transition: 0.5s;
 }
@@ -77,8 +77,8 @@ nav ul li {
 }
 nav ul li a {
     text-decoration: none;
-    color: #f57660; /* Original color, make sure it's visible on the new sideNav background */
-    display: block; /* Added for better click area */
+    color: #c5490fff; /* Original color, make sure it's visible on the new sideNav background */
+    display: bold; /* Added for better click area */
     padding: 10px; /* Added for better click area */
 }
 #menuBtn{
@@ -208,7 +208,7 @@ nav ul li a {
 
 #service{
     width: 100%;
-    padding: 70px 0;
+    padding: 20px 0;
     background: #e6d7a3;
 }
 .service-box{

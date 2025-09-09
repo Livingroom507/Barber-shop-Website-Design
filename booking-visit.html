@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Barber shop Website Design</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+</head>    
+<body>
+<section id="banner">
+    <img src="images/Logo1.jpg" class="logo" alt="Hair Care Studio Logo">
+    <div class="banner-text">
+        <h1>Hair Care Studio</h1>
+        <p>Livingroom507moc Hair Care Is Styling Your Life</p>
+        <div class="banner-btn">
+            <a href="#feature"><span></span>Check Us Out</a>
+            <a href="#service"><span></span>The Landscape</a>
+        </div>
+    </div>
+</section>
+
+<div id="sideNav">
+    <nav>
+    <ul>
+        <li><a href="index.html">BACKHOME</a></li>
+        <li><a href="#news-blog">NEWS & EVENTS</a></li> <!-- New Menu Item -->
+        <li><a href="#footer">Book An Appointment</a></li>
+    </ul>    
+    </nav>
+</div>
+<div id="menuBtn">
+    <img src="images/menu-1.png" id="menu" alt="">
+</div>
+
+
+<!----News & Events (Newspaper Style)---->
+<section id="news-blog">
+    <div class="title-text">
+        <p>LIVINGROOM507MOC UPDATES</p>   
+        <h1>News & Events</h1>
+    </div>
+    <div class="news-container">
+        <!-- Example News Article 1 -->
+        <div class="news-article">
+            <img src="images/news-event-1.jpg" alt="Grand Opening Event">
+            <h3>Grand Opening Event!</h3>
+            <small>October 26, 2023</small>
+            <p>Join us for the grand opening of our new studio location! Expect live music, special discounts, and free styling consultations. Don't miss out!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 2 -->
+        <div class="news-article">
+            <img src="images/news-event-2.jpg" alt="Holiday Specials">
+            <h3>Holiday Season Specials!</h3>
+            <small>November 15, 2023</small>
+            <p>Get ready for the holidays with our exclusive packages. From sharp cuts to relaxing shaves, treat yourself or a loved one. Limited time offers!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 3 -->
+        <div class="news-article">
+            <img src="images/news-event-3.jpg" alt="Barber Battle">
+            <h3>Livingroom507moc Barber Battle 2024</h3>
+            <small>December 1, 2023</small>
+            <p>Witness the best barbers in Panama compete for the ultimate title! A day of skill, style, and entertainment. Stay tuned for registration details.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 1 -->
+        <div class="news-article">
+            <img src="images/news-event-1.jpg" alt="Grand Opening Event">
+            <h3>Grand Opening Event!</h3>
+            <small>October 26, 2023</small>
+            <p>Join us for the grand opening of our new studio location! Expect live music, special discounts, and free styling consultations. Don't miss out!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 2 -->
+        <div class="news-article">
+            <img src="images/news-event-2.jpg" alt="Holiday Specials">
+            <h3>Holiday Season Specials!</h3>
+            <small>November 15, 2023</small>
+            <p>Get ready for the holidays with our exclusive packages. From sharp cuts to relaxing shaves, treat yourself or a loved one. Limited time offers!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 3 -->
+        <div class="news-article">
+            <img src="images/news-event-3.jpg" alt="Barber Battle">
+            <h3>Livingroom507moc Barber Battle 2024</h3>
+            <small>December 1, 2023</small>
+            <p>Witness the best barbers in Panama compete for the ultimate title! A day of skill, style, and entertainment. Stay tuned for registration details.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 2 -->
+        <div class="news-article">
+            <img src="images/news-event-2.jpg" alt="Holiday Specials">
+            <h3>Holiday Season Specials!</h3>
+            <small>November 15, 2023</small>
+            <p>Get ready for the holidays with our exclusive packages. From sharp cuts to relaxing shaves, treat yourself or a loved one. Limited time offers!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 3 -->
+        <div class="news-article">
+            <img src="images/news-event-3.jpg" alt="Barber Battle">
+            <h3>Livingroom507moc Barber Battle 2024</h3>
+            <small>December 1, 2023</small>
+            <p>Witness the best barbers in Panama compete for the ultimate title! A day of skill, style, and entertainment. Stay tuned for registration details.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Add more news articles here as needed -->
+    </div>
+</section>
+
+<!------- Booking Section ------>
+<section id="booking">
+    <div class="title-text">
+        <p>BOOK AN APPOINTMENT</p>
+        <h1>Schedule Your Visit</h1>
+    </div>
+    <div class="booking-container">
+        <div class="calendar-wrapper">
+            <!-- Calendar will be rendered here by JavaScript -->
+            <div id="calendar"></div>
+            <div class="calendar-nav">
+                <button id="prevMonth">&lt; Prev</button>
+                <span id="currentMonthYear"></span>
+                <button id="nextMonth">Next &gt;</button>
+            </div>
+        </div>
+        <div class="booking-form-wrapper">
+            <form id="appointmentForm">
+                <label for="clientName">Your Name:</label>
+                <input type="text" id="clientName" name="clientName" required>
+
+                <label for="clientEmail">Your Email:</label>
+                <input type="email" id="clientEmail" name="clientEmail" required>
+
+                <label for="service">Select Service:</label>
+                <select id="service" name="service" required>
+                    <option value="">-- Choose a service --</option>
+                    <option value="Hair Styling">Hair Styling</option>
+                    <option value="Beard Trim">Beard Trim</option>
+                    <option value="Full Cut">Full Cut</option>
+                    <!-- Add more services as needed -->
+                </select>
+
+                <label for="selectedDate">Selected Date:</label>
+                <input type="text" id="selectedDate" name="selectedDate" readonly required>
+
+                <label for="availableTimes">Available Times:</label>
+                <select id="availableTimes" name="availableTimes" required disabled>
+                    <option value="">-- Select a time --</option>
+                </select>
+
+                <button type="submit">Confirm Booking</button>
+                <p id="bookingMessage"></p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-------footer----->
+<section id="footer">
+    <img src="images/World-Panama.jpg" alt="World Panama Footer Logo" class="footer-img"> 
+    <div class="title-text">
+        <p>CONTACT</p>   
+        <h1>Visit Shop Today</h1>
+    </div>
+    <div class="footer-row">
+        <div class="footer-left">
+            <h1>Opening Hours</h1>
+            <p><i class="fa-regular fa-clock"></i>Monday to Friday - 6am to 10:30pm</p>
+            <p><i class="fa-regular fa-clock"></i>Saturday to Sunday - 6am to 10:30pm</p>
+        </div>
+        <div class="footer-right">
+            <h1>Get In Touch</h1>
+            <p>Calle K, 5 de Mayo, Panama<i class="fa fa-map-marker" aria-hidden="true"></i></p>
+            <p>roblq123@gmail.com<i class="fa fa-paper-plane" aria-hidden="true"></i></p>
+            <p>507-6218-2688<i class="fa fa-phone" aria-hidden="true"></i></p>
+            <a href="#booking-section" class="book-appointment-btn">Book An Appointment Now</a> <!-- New Booking Button -->
+        </div>     
+    </div>
+
+    <div class="social-links">
+        <i class="fa-brands fa-facebook"></i>
+        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-youtube"></i>
+        <p>Copyright Easy Tutorial YouTube Channel</p>
+    </div>
+</section>
+
+<script>
+    // ... existing menu and smooth scroll script ...
+    var menuBtn = document.getElementById("menuBtn")
+    var sideNav = document.getElementById("sideNav")
+    var menu = document.getElementById("menu")
+
+    sideNav.style.right = "-250px";
+
+    menuBtn.onclick = function(){
+        if(sideNav.style.right == "-250px"){
+            sideNav.style.right = "0";
+            // Ensure 'images/close.png' and 'images/menu.png' exist in your project.
+            menu.src = "images/close.png"; 
+        }
+        else{
+            sideNav.style.right = "-250px";
+            menu.src = "images/menu.png";
+        }
+}
+
+var scroll = new SmoothScroll('a[href*="#"]', {
+	speed: 500,
+	speedAsDuration: true
+});
+    // --- Booking System JavaScript ---
+    const calendarEl = document.getElementById('calendar');
+    const currentMonthYearEl = document.getElementById('currentMonthYear');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    const selectedDateInput = document.getElementById('selectedDate');
+    const availableTimesSelect = document.getElementById('availableTimes');
+    const appointmentForm = document.getElementById('appointmentForm');
+    const bookingMessageEl = document.getElementById('bookingMessage');
+
+    let currentDisplayDate = new Date(); // Tracks the month currently displayed in the calendar
+
+    async function fetchAvailability(date) {
+        const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
+        try {
+            const response = await fetch(`/api/availability?date=${formattedDate}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const times = await response.json();
+            availableTimesSelect.innerHTML = '<option value="">-- Select a time --</option>';
+            if (times.length > 0) {
+                availableTimesSelect.disabled = false;
+                times.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = `${formattedDate}T${time}:00Z`; // ISO format for backend
+                    option.textContent = time;
+                    availableTimesSelect.appendChild(option);
+                });
+            } else {
+                availableTimesSelect.disabled = true;
+                const option = document.createElement('option');
+                option.textContent = 'No times available';
+                availableTimesSelect.appendChild(option);
+            }
+        } catch (error) {
+            console.error("Error fetching availability:", error);
+            availableTimesSelect.innerHTML = '<option value="">Error loading times</option>';
+            availableTimesSelect.disabled = true;
+        }
+    }
+
+    function renderCalendar() {
+        calendarEl.innerHTML = ''; // Clear previous calendar
+        const year = currentDisplayDate.getFullYear();
+        const month = currentDisplayDate.getMonth();
+        currentMonthYearEl.textContent = `${currentDisplayDate.toLocaleString('default', { month: 'long' })} ${year}`;
+
+        const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const calendarGrid = document.createElement('div');
+        calendarGrid.classList.add('calendar-grid');
+
+        // Add empty cells for days before the 1st
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            calendarGrid.appendChild(document.createElement('div'));
+        }
+
+        // Add day cells
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayEl = document.createElement('div');
+            dayEl.classList.add('calendar-day');
+            dayEl.textContent = day;
+            dayEl.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const currentDay = new Date(year, month, day);
+
+            if (currentDay < today) {
+                dayEl.classList.add('past-day');
+            } else {
+                dayEl.addEventListener('click', () => {
+                    document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+                    dayEl.classList.add('selected');
+                    selectedDateInput.value = dayEl.dataset.date;
+                    fetchAvailability(new Date(dayEl.dataset.date));
+                });
+            }
+            calendarGrid.appendChild(dayEl);
+        }
+        calendarEl.appendChild(calendarGrid);
+    }
+
+    prevMonthBtn.addEventListener('click', () => {
+        currentDisplayDate.setMonth(currentDisplayDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+        currentDisplayDate.setMonth(currentDisplayDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    appointmentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        bookingMessageEl.textContent = 'Booking...';
+        bookingMessageEl.style.color = 'orange';
+
+        const formData = new FormData(appointmentForm);
+        const data = {
+            clientName: formData.get('clientName'),
+            clientEmail: formData.get('clientEmail'),
+            service: formData.get('service'),
+            appointmentTime: formData.get('availableTimes'), // This will be the ISO string
+            durationMinutes: 60 // Assuming a default of 60 minutes for now
+        };
+
+        try {
+            const response = await fetch('/api/book-appointment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                bookingMessageEl.textContent = result.message;
+                bookingMessageEl.style.color = 'green';
+                appointmentForm.reset();
+                // Re-fetch availability for the selected date to update the display
+                if (selectedDateInput.value) {
+                    fetchAvailability(new Date(selectedDateInput.value));
+                }
+            } else {
+                bookingMessageEl.textContent = `Error: ${result.message || 'Failed to book appointment'}`;
+                bookingMessageEl.style.color = 'red';
+            }
+        } catch (error) {
+            console.error("Booking error:", error);
+            bookingMessageEl.textContent = 'An unexpected error occurred.';
+            bookingMessageEl.style.color = 'red';
+        }
+    });
+
+    // Initialize calendar on page load
+    renderCalendar();
+</script>
+</body>
+</html>

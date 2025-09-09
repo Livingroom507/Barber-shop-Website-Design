@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <title>Barber shop Website Design</title>
     <link rel="stylesheet" href="style.css">
-    <!-- It's generally better to host your own Font Awesome files or use a CDN link directly from Font Awesome.
-         The local path 'css/all.min.css' is fine if you have it in your project, but the Google Drive link is unusual for a CSS file.
-         I'll assume 'css/all.min.css' is local and remove the problematic Google Drive link. -->
     <link rel="stylesheet" href="css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
@@ -14,16 +11,13 @@
 </head>    
 <body>
 <section id="banner">
-    <!-- Using Google Drive for images directly might lead to broken links or performance issues.
-         For deployment, it's highly recommended to host these images within your project's 'images' folder
-         or use a dedicated image hosting service/CDN. For now, I'll keep the links but be aware of this. -->
     <img src="images/Logo1.jpg" class="logo" alt="Hair Care Studio Logo">
     <div class="banner-text">
         <h1>Hair Care Studio</h1>
         <p>Livingroom507moc Hair Care Is Styling Your Life</p>
         <div class="banner-btn">
-            <a href="#feature"><span></span>Check Us Out</a> <!-- Changed to link to a section -->
-            <a href="#service"><span></span>The Landscape</a> <!-- Changed to link to a section -->
+            <a href="#feature"><span></span>Check Us Out</a>
+            <a href="#service"><span></span>The Landscape</a>
         </div>
     </div>
 </section>
@@ -34,141 +28,168 @@
         <li><a href="#banner">HOME</a></li>
         <li><a href="#feature">FEATURES</a></li>
         <li><a href="#service">SERVICES</a></li>
+        <li><a href="#news-blog">NEWS & EVENTS</a></li> <!-- New Menu Item -->
+        <li><a href="booking-visit.html">BOOKING</a></li> <!-- New Menu Item -->
         <li><a href="#Testimonial">TESTIMONIALS</a></li>
         <li><a href="#footer">MEET US</a></li>
     </ul>    
     </nav>
 </div>
 <div id="menuBtn">
-    <!-- Similarly, for menu icons, it's best to host them locally or use a reliable CDN. -->
     <img src="images/menu-1.png" id="menu" alt="">
 </div>
 
 <!--Features-->
-
 <section id="feature">
-<div class="title-text">
-<p>LIVINGROOM507MOC's FEATURES</p>   
-<h1>Why Choose Us</h1>
-</div>
-<div class="feature-box">
-    <div class="features">
-        <h1>Experienced Staff</h1>
-        <div class="features-desc">
-            <div class="feature-icon">
-                <i class="fa-solid fa-user-shield"></i>
-            </div>    
-            <div class="feature-text">
-                <p>In bold.... taking national stages, 
-                moderately approaching the steps towards the international audience. A movement that began as a trendsetter in barber services and tattoos. What started as "the talk of the town" !Boomed! into LIVINGROOM507MOC – a lifestyle movement. From the food people eat and their hair care routines to the clothes they wear and where they shop, LIVINGROOM507 shapes individual expression.
-People aren't just gravitating towards our quality and innovative business taste; they're embracing a whole new way of life. Just take a look at our collections and see for yourself.
-</p>
-            </div>
-        </div>
-        <h1>Pre Booking Online</h1>
-        <div class="features-desc">
-            <div class="feature-icon">
-                <i class="fa-regular fa-square-check"></i>
-            </div>    
-            <div class="feature-text">
-                <p>In bold.... (Engaging & Community-Focused)
-Your official destination for all things glam! ✨ Explore my services and see my real-talk reviews on viral products. Let's find your perfect look together. DM me or hit the link to book! 💖
-</p>
-            </div>
-        </div>
-        <h1>Affordable Cost</h1>
-        <div class="features-desc">
-            <div class="feature-icon">
-                <i class="fa-solid fa-comment-dollar"></i>
-            </div>    
-            <div class="feature-text">
-                <p>In bold.... Panama's heat has nothing on a flawless look! We offer styling services and review products that work in our climate. Ready for a glow up, PTY? DM me for availability or book via my site! (199 characters)
-
-​Panama hot-proof beauty? We style & review products for our climate. DM, book online! 🇵🇦✨
-</p>
-            </div>
-        </div>      
+    <div class="title-text">
+        <p>LIVINGROOM507MOC's FEATURES</p>   
+        <h1>Why Choose Us</h1>
     </div>
-    <div class="features-img">
-        <!-- Google Drive image link -->
-        <img src="images/BARBER.png" alt="Barber working on hair">
+    <div class="feature-box">
+        <div class="features">
+            <h1>Experienced Staff</h1>
+            <div class="features-desc">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>    
+                <div class="feature-text">
+                    <p>In bold.... taking national stages, 
+                    moderately approaching the steps towards the international audience. A movement that began as a trendsetter in barber services and tattoos. What started as "the talk of the town" !Boomed! into LIVINGROOM507MOC – a lifestyle movement. From the food people eat and their hair care routines to the clothes they wear and where they shop, LIVINGROOM507 shapes individual expression.
+    People aren't just gravitating towards our quality and innovative business taste; they're embracing a whole new way of life. Just take a look at our collections and see for yourself.
+    </p>
+                </div>
+            </div>
+            <h1>Pre Booking Online</h1>
+            <div class="features-desc">
+                <div class="feature-icon">
+                    <i class="fa-regular fa-square-check"></i>
+                </div>    
+                <div class="feature-text">
+                    <p>In bold.... (Engaging & Community-Focused)
+    Your official destination for all things glam! ✨ Explore my services and see my real-talk reviews on viral products. Let's find your perfect look together. DM me or hit the link to book! 💖
+    </p>
+                </div>
+            </div>
+            <h1>Affordable Cost</h1>
+            <div class="features-desc">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-comment-dollar"></i>
+                </div>    
+                <div class="feature-text">
+                    <p>In bold.... Panama's heat has nothing on a flawless look! We offer styling services and review products that work in our climate. Ready for a glow up, PTY? DM me for availability or book via my site! (199 characters)
+    
+    ​Panama hot-proof beauty? We style & review products for our climate. DM, book online! 🇵🇦✨
+    </p>
+                </div>
+            </div>      
+        </div>
+        <div class="features-img">
+            <img src="images/BARBER.png" alt="Barber working on hair">
+        </div>
     </div>
-</div>
-
 </section>
 
 <!---Service--->
-
 <section id="service">
     <div class="title-text">
         <p>LIVINGROOM507MOC's SERVICES</p>   
         <h1>We Provide Better</h1>
+    </div>
+    <div class="service-box">
+        <div class="single-service">
+            <img src="images/Urban-Style.3.png" alt="Care Studio Shops">
+            <div class="overlay"></div>
+            <div class="service-desc">
+                <h3>Care | Studio Shops</h3>
+                <hr>
+                <p> our contents, fashion, and individual look, brought LIVINGROOM507 The BARBERS & TATTOO POLLARD 
+                    to the public light. JCW's the hub, which started the trend, bringing LIVINGROOM507 to start, just the other day it was
+                    just the talk of the town... now Livingroom507, the movement people want, from the 
+                    things they eat, to the clothes they wear, the place they stop to shop, which says something 
+                    about them as individuals.
+                </p>
+            </div>
         </div>
-        <div class="service-box">
-            <div class="single-service">
-                <!-- Google Drive image link -->
-                <img src="images/Urban-Style.3.png" alt="Care Studio Shops">
-                <div class="overlay"></div>
-                <div class="service-desc">
-                    <h3>Care | Studio Shops</h3>
-                    <hr>
-                    <p> our contents, fashion, and individual look, brought LIVINGROOM507 The BARBERS & TATTOO POLLARD 
-                        to the public light. JCW's the hub, which started the trend, bringing LIVINGROOM507 to start, just the other day it was
-                        just the talk of the town... now Livingroom507, the movement people want, from the 
-                        things they eat, to the clothes they wear, the place they stop to shop, which says something 
-                        about them as individuals.
-                    </p>
-                </div>
+        <div class="single-service">
+            <img src="images/Hair-Styling.1.png" alt="Hair Styling">
+            <div class="overlay"></div>
+            <div class="service-desc">
+                <h3>Hair Styling</h3>
+                <hr>
+                <p> Shares and LIKEs of our contents, fashion, and individual look, brought LIVINGROOM507 The BARBERS & TATTOO POLLARD 
+                    to the public light. JCW's the hub, which started the trend, bringing LIVINGROOM507 to start, just the other day it was
+                    just the talk of the town... now Livingroom507, the movement people want, from the 
+                    things they eat, to the clothes they wear, the place they stop to shop, which says something 
+                    about them as individuals. 
+                </p>
             </div>
-            <div class="single-service">
-                <!-- Relative path for image. Ensure 'images/IMG-20210625-WA0003.jpg' exists in your project. -->
-                <img src="images/Hair-Styling.1.png" alt="Hair Styling">
-                <div class="overlay"></div>
-                <div class="service-desc">
-                    <h3>Hair Styling</h3>
-                    <hr>
-                    <p> Shares and LIKEs of our contents, fashion, and individual look, brought LIVINGROOM507 The BARBERS & TATTOO POLLARD 
-                        to the public light. JCW's the hub, which started the trend, bringing LIVINGROOM507 to start, just the other day it was
-                        just the talk of the town... now Livingroom507, the movement people want, from the 
-                        things they eat, to the clothes they wear, the place they stop to shop, which says something 
-                        about them as individuals. 
-                    </p>
-                </div>
+        </div>
+        <div class="single-service">
+            <img src="images/Partner-Commission-Platform.png" alt="Partner Commission Platform">
+            <div class="overlay"></div>
+            <div class="service-desc">
+                <h3>Partner Commission Platform</h3>
+                <hr>
+                <p> people gravitating more and more towards our quality and innovative business taste, 
+                    just take a look at what speaks for its self our collections, look over our connections, activities, events, farther
+                    observe the many versions of our local and international brands ( clothes, accessories, program developements,
+                    electronics and domestic products...) (LIVINGROOM507 brand). 
+                </p>
             </div>
-            <div class="single-service">
-                <!-- Google Drive image link -->
-                <img src="images/Partner-Commission-Platform.png" alt="Partner Commission Platform">
-                <div class="overlay"></div>
-                <div class="service-desc">
-                    <h3>Partner Commission Platform</h3>
-                    <hr>
-                    <p> people gravitating more and more towards our quality and innovative business taste, 
-                        just take a look at what speaks for its self our collections, look over our connections, activities, events, farther
-                        observe the many versions of our local and international brands ( clothes, accessories, program developements,
-                        electronics and domestic products...) (LIVINGROOM507 brand). 
-                    </p>
-                </div>
+        </div>
+        <div class="single-service">
+            <img src="images/Workspace.2.png" alt="Workspace">
+            <div class="overlay"></div>
+            <div class="service-desc">
+                <h3>WorkSpace | Livingroom507moc.com</h3>
+                <hr>
+                <p>
+                    Contact us for the details, let us provide you with professionalism, what you've been really looking for, in trusted management.
+                    I manage my team and take full responsibility til the job is completed, from getting a hair cut,
+                    creative art designed, planning out large or no matter how small a business, even promoting and hosting events,
+                    join with us, Livingroom507 is where it all starts for you. 
+                </p>
             </div>
-            <div class="single-service">
-                <!-- Relative path for image. Ensure 'images/BLOG Image-1. 2018-09-26 at 3.58.09 PM.jpg' exists in your project. -->
-                <img src="images/Workspace.2.png" alt="Workspace">
-                <div class="overlay"></div>
-                <div class="service-desc">
-                    <h3>WorkSpace | Livingroom507moc.com</h3>
-                    <hr>
-                    <p>
-                        Contact us for the details, let us provide you with professionalism, what you've been really looking for, in trusted management.
-                        I manage my team and take full responsibility til the job is completed, from getting a hair cut,
-                        creative art designed, planning out large or no matter how small a business, even promoting and hosting events,
-                        join with us, Livingroom507 is where it all starts for you. 
-                    </p>
-                </div>
-            </div>
-        </div>   
+        </div>
+    </div>   
+</section>
+
+<!----News & Events (Newspaper Style)---->
+<section id="news-blog">
+    <div class="title-text">
+        <p>LIVINGROOM507MOC UPDATES</p>   
+        <h1>News & Events</h1>
+    </div>
+    <div class="news-container">
+        <!-- Example News Article 1 -->
+        <div class="news-article">
+            <img src="images/news-event-1.jpg" alt="Grand Opening Event">
+            <h3>Grand Opening Event!</h3>
+            <small>October 26, 2023</small>
+            <p>Join us for the grand opening of our new studio location! Expect live music, special discounts, and free styling consultations. Don't miss out!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 2 -->
+        <div class="news-article">
+            <img src="images/news-event-2.jpg" alt="Holiday Specials">
+            <h3>Holiday Season Specials!</h3>
+            <small>November 15, 2023</small>
+            <p>Get ready for the holidays with our exclusive packages. From sharp cuts to relaxing shaves, treat yourself or a loved one. Limited time offers!</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Example News Article 3 -->
+        <div class="news-article">
+            <img src="images/news-event-3.jpg" alt="Barber Battle">
+            <h3>Livingroom507moc Barber Battle 2024</h3>
+            <small>December 1, 2023</small>
+            <p>Witness the best barbers in Panama compete for the ultimate title! A day of skill, style, and entertainment. Stay tuned for registration details.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+        <!-- Add more news articles here as needed -->
+    </div>
 </section>
 
 <!----Testimonial---->
-
 <section id="Testimonial">
     <div class="title-text">
     <p>TESTIMONIAL</p>   
@@ -177,7 +198,6 @@ Your official destination for all things glam! ✨ Explore my services and see m
     <div class="testimonial-row">
         <div class="testimonial-col">
             <div class="user">
-                <!-- Relative path for image. Ensure 'images/logo/World-Panama.jpg' exists in your project. -->
                 <img src="images/logo/World-Panama.jpg" alt="Client testimonial image">
                 <div class="user-info">
                    <h4>James Watson <i class="fa-brands fa-x-twitter"></i>
@@ -189,7 +209,6 @@ Your official destination for all things glam! ✨ Explore my services and see m
         </div>
         <div class="testimonial-col">
             <div class="user">
-                <!-- Relative path for image -->
                 <img src="images/logo/World-Panama.jpg" alt="Client testimonial image">
                 <div class="user-info">
                    <h4>James Watson <i class="fa-brands fa-facebook facebook-icon"></i></h4>
@@ -202,7 +221,6 @@ Your official destination for all things glam! ✨ Explore my services and see m
         </div>
         <div class="testimonial-col">
             <div class="user">
-                <!-- Relative path for image -->
                 <img src="images/logo/World-Panama.jpg" alt="Client testimonial image">
                 <div class="user-info">
                    <h4>James Watson <i class="fa-brands fa-tiktok tiktok-icon"></i></h4>
@@ -214,42 +232,40 @@ Your official destination for all things glam! ✨ Explore my services and see m
             great service, make orders, get domicile services appointed grooming: hair cuts, hair styling, health tips, to finding the answers, getting quick set-up, regarding your</p>
         </div>
     </div>
-
 </section>
 
 <!-------footer----->
-
 <section id="footer">
-    <!-- Image path seems incomplete. Should be 'images/World-Panama.jpg' or similar if it's a logo/image.
-         Assuming it's a logo, I'll update the alt text. If it's a background, it should be in CSS. -->
     <img src="images/World-Panama.jpg" alt="World Panama Footer Logo" class="footer-img"> 
     <div class="title-text">
-    <p>CONTACT</p>   
-    <h1>Visit Shop Today</h1>
+        <p>CONTACT</p>   
+        <h1>Visit Shop Today</h1>
     </div>
-<div class="footer-row">
-<div class="footer-left">
-    <h1>Opening Hours</h1>
-    <p><i class="fa-regular fa-clock"></i>Monday to Friday - 6am to 10:30pm</p>
-    <p><i class="fa-regular fa-clock"></i>Saturday to Sunday - 6am to 10:30pm</p>
-</div>
-<div class="footer-right">
-    <h1>Get In Touch</h1>
-    <p>Calle K, 5 de Mayo, Panama<i class="fa fa-map-marker" aria-hidden="true"></i></p>
-    <p>roblq123@gmail.com<i class="fa fa-paper-plane" aria-hidden="true"></i></p>
-    <p>507-6218-2688<i class="fa fa-phone" aria-hidden="true"></i></p>
-</div>     
-</div>
+    <div class="footer-row">
+        <div class="footer-left">
+            <h1>Opening Hours</h1>
+            <p><i class="fa-regular fa-clock"></i>Monday to Friday - 6am to 10:30pm</p>
+            <p><i class="fa-regular fa-clock"></i>Saturday to Sunday - 6am to 10:30pm</p>
+        </div>
+        <div class="footer-right">
+            <h1>Get In Touch</h1>
+            <p>Calle K, 5 de Mayo, Panama<i class="fa fa-map-marker" aria-hidden="true"></i></p>
+            <p>roblq123@gmail.com<i class="fa fa-paper-plane" aria-hidden="true"></i></p>
+            <p>507-6218-2688<i class="fa fa-phone" aria-hidden="true"></i></p>
+            <a href="#booking-section" class="book-appointment-btn">Book An Appointment Now</a> <!-- New Booking Button -->
+        </div>     
+    </div>
 
-<div class="social-links">
-    <i class="fa-brands fa-facebook"></i>
-    <i class="fa-brands fa-instagram"></i>
-    <i class="fa-brands fa-twitter"></i>
-    <i class="fa-brands fa-youtube"></i>
-    <p>Copyright Easy Tutorial YouTube Channel</p>
-</div>
-
+    <div class="social-links">
+        <i class="fa-brands fa-facebook"></i>
+        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-youtube"></i>
+        <p>Copyright Easy Tutorial YouTube Channel</p>
+    </div>
 </section>
+
+
 <script>
     var menuBtn = document.getElementById("menuBtn")
     var sideNav = document.getElementById("sideNav")

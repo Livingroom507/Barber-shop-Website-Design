@@ -587,4 +587,252 @@ hr{
         flex-basis: 100%;
         width: 90%;
     }
+    
+}
+/* Raven-specific styles */
+
+#raven-hero {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/raven-banner.jpg') no-repeat center center; /* Replace with your Raven specific banner image */
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 20px;
+}
+
+#raven-hero h1 {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 80px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+#raven-hero p {
+    font-size: 24px;
+    margin-bottom: 40px;
+    font-style: italic;
+}
+
+.hero-buttons a {
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 15px;
+    padding: 15px 30px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.hero-buttons a.btn-primary {
+    background-color: #c7a910ff; /* Raven accent color */
+    border-color: #c7a910ff;
+}
+
+.hero-buttons a.btn-primary:hover {
+    background-color: #a0880e;
+    border-color: #a0880e;
+    color: #fff;
+}
+
+.hero-buttons a.btn-secondary:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+/* About Section */
+#raven-about {
+    padding: 100px 0;
+    background: #fdfdfd;
+}
+
+#raven-about .title-text p {
+    color: #c7a910ff;
+}
+#raven-about .title-text h1 {
+    color: #333;
+}
+
+.about-content {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+}
+
+.about-image {
+    flex: 1;
+    min-width: 300px;
+    max-width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.about-text {
+    flex: 1;
+    min-width: 300px;
+    max-width: 50%;
+}
+
+.about-text p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.about-text .btn-primary {
+    display: inline-block;
+    background-color: #c7a910ff;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.about-text .btn-primary:hover {
+    background-color: #a0880e;
+}
+
+/* Gallery Section (Image Cards) */
+#raven-gallery {
+    padding: 100px 0;
+    background: #e6d7a3; /* Consistent with your service section background */
+}
+
+#raven-gallery .title-text p {
+    color: #c5490fff; /* A contrasting accent from your brand */
+}
+#raven-gallery .title-text h1 {
+    color: #333;
+}
+
+.image-cards-container {
+    width: 80%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding-top: 50px;
+}
+
+.image-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-card:hover {
+    transform: translateY(-10px);
+}
+
+.image-card img {
+    width: 100%;
+    height: 250px; /* Fixed height for consistency */
+    object-fit: cover;
+    display: block;
+}
+
+.card-info {
+    padding: 20px;
+}
+
+.card-info h3 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card-info p {
+    font-size: 0.95em;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Video Cards Section */
+#raven-videos {
+    padding: 100px 0;
+    background: #fdfdfd;
+}
+
+#raven-videos .title-text p {
+    color: #87996f; /* Another accent from your brand */
+}
+#raven-videos .title-text h1 {
+    color: #333;
+}
+
+.video-cards-container {
+    width: 80%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding-top: 50px;
+}
+
+.video-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.video-card:hover {
+    transform: translateY(-10px);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Contact / Lead Capture Section */
+#raven-contact {
+    padding: 100px 0;
+    background: #efefef; /* Consistent with your footer background */
+    text-align: center;
+}
+
+#raven-contact .title-text p {
+    color: #009688; /* From your footer social links */
+}
+#raven-contact .title-text h1 {
+    color: #333;
+}
+
+.contact-form-container {
+    width: 60%;
+    margin: 50px auto 0;
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    text-align: left;   
 }

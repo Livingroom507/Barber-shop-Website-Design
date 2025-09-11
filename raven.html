@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raven Landing Page - Hair Care Studio</title>
+    <link rel="stylesheet" href="style.css"> <!-- Your main styles -->
+    <link rel="stylesheet" href="raven-style.css"> <!-- Raven-specific styles -->
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="sideNav">
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="#raven-hero">RAVEN HOME</a></li>
+                <li><a href="#raven-about">ABOUT RAVEN</a></li>
+                <li><a href="#raven-gallery">GALLERY</a></li>
+                <li><a href="#raven-videos">VIDEOS</a></li>
+                <li><a href="#raven-contact">JOIN US</a></li>
+            </ul>    
+        </nav>
+    </div>
+    <div id="menuBtn">
+        <img src="images/menu-1.png" id="menu" alt="">
+    </div>
+
+    <section id="raven-hero">
+        <div class="hero-content">
+            <h1>Embrace the Raven Lifestyle</h1>
+            <p>Discover unique styles, exclusive content, and connect with a vibrant community.</p>
+            <div class="hero-buttons">
+                <a href="#raven-contact" class="btn-primary">Join the Movement</a>
+                <a href="#raven-gallery" class="btn-secondary">Explore More</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="raven-about">
+        <div class="title-text">
+            <p>THE RAVEN STORY</p>
+            <h1>Unleash Your True Self</h1>
+        </div>
+        <div class="about-content">
+            <img src="images/raven-about-main.jpg" alt="Raven studio interior" class="about-image">
+            <div class="about-text">
+                <p>The Raven concept is more than just a brand; it's a philosophy. Born from a desire to push boundaries in hair care and personal expression, Raven offers an unparalleled experience where creativity knows no limits. We believe in crafting looks that are as individual as you are, empowering you to step out with confidence and a style that truly resonates with your inner spirit.</p>
+                <p>Our expert artisans combine cutting-edge techniques with a deep understanding of aesthetics, ensuring every cut, color, and style tells a story. Join the Raven family and transform your perception of beauty.</p>
+                <a href="#raven-contact" class="btn-primary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="raven-gallery">
+        <div class="title-text">
+            <p>RAVEN COLLECTION</p>
+            <h1>Our Signature Styles</h1>
+        </div>
+        <div class="image-cards-container">
+            <div class="image-card">
+                <img src="images/raven-style-1.jpg" alt="Modern Haircut">
+                <div class="card-info">
+                    <h3>The Urban Edge</h3>
+                    <p>Sharp lines and bold contrasts for the city trendsetter.</p>
+                </div>
+            </div>
+            <div class="image-card">
+                <img src="images/raven-style-2.jpg" alt="Creative Hair Color">
+                <div class="card-info">
+                    <h3>Chromatic Flow</h3>
+                    <p>Vibrant colors seamlessly blended for a unique look.</p>
+                </div>
+            </div>
+            <div class="image-card">
+                <img src="images/raven-style-3.jpg" alt="Classic Style with a Twist">
+                <div class="card-info">
+                    <h3>Timeless Revival</h3>
+                    <p>A modern take on classic elegance, perfect for any occasion.</p>
+                </div>
+            </div>
+            <div class="image-card">
+                <img src="images/raven-style-4.jpg" alt="Avant-Garde Hairstyle">
+                <div class="card-info">
+                    <h3>Avant-Garde Artistry</h3>
+                    <p>Pushing the boundaries of conventional hair design.</p>
+                </div>
+            </div>
+            <!-- Add more image cards as needed -->
+        </div>
+    </section>
+
+    <section id="raven-videos">
+        <div class="title-text">
+            <p>RAVEN IN MOTION</p>
+            <h1>Watch Our Craft in Action</h1>
+        </div>
+        <div class="video-cards-container">
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/your-video-id-1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-info">
+                    <h3>Behind the Scenes: The Raven Cut</h3>
+                    <p>Experience the precision and passion that goes into every Raven haircut.</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/your-video-id-2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-info">
+                    <h3>Color Transformation Journey</h3>
+                    <p>Witness the magic of a complete hair color transformation by our experts.</p>
+                </div>
+            </div>
+            <!-- Add more video cards as needed -->
+        </div>
+    </section>
+
+    <section id="raven-contact">
+        <div class="title-text">
+            <p>STAY CONNECTED</p>
+            <h1>Join the Raven Community</h1>
+        </div>
+        <div class="contact-form-container">
+            <p>Be the first to know about exclusive offers, new styles, and special events!</p>
+            <form id="leadCaptureForm">
+                <input type="text" id="leadName" name="name" placeholder="Your Name" required>
+                <input type="email" id="leadEmail" name="email" placeholder="Your Email" required>
+                <textarea id="leadMessage" name="message" rows="4" placeholder="Optional: Tell us what you're looking for!"></textarea>
+                <button type="submit" class="btn-primary">Sign Me Up!</button>
+                <p id="leadMessageStatus"></p>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Re-use your main footer or create a simple one for Raven -->
+        <p>&copy; 2023 Hair Care Studio - Raven. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <script>
+        // Existing menu toggle script (can be moved to a shared script.js if preferred)
+        var menuBtn = document.getElementById("menuBtn");
+        var sideNav = document.getElementById("sideNav");
+        var menu = document.getElementById("menu");
+
+        sideNav.style.right = "-250px";
+
+        menuBtn.onclick = function(){
+            if(sideNav.style.right == "-250px"){
+                sideNav.style.right = "0";
+                menu.src = "images/close.png"; 
+            }
+            else{
+                sideNav.style.right = "-250px";
+                menu.src = "images/menu.png";
+            }
+        }
+
+        var scroll = new SmoothScroll('a[href*="#"]', {
+            speed: 500,
+            speedAsDuration: true
+        });
+
+        // Lead Capture Form Submission
+        document.getElementById('leadCaptureForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const statusMessage = document.getElementById('leadMessageStatus');
+            statusMessage.textContent = 'Submitting...';
+            statusMessage.style.color = 'orange';
+
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
+
+            try {
+                const response = await fetch('/api/capture-lead', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    statusMessage.textContent = 'Thank you for joining the Raven community!';
+                    statusMessage.style.color = 'green';
+                    form.reset();
+                } else {
+                    statusMessage.textContent = `Error: ${result.message || 'Failed to capture lead.'}`;
+                    statusMessage.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Lead capture error:', error);
+                statusMessage.textContent = 'An unexpected error occurred.';
+                statusMessage.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -592,7 +592,7 @@ hr{
 /* Raven-specific styles */
 
 #raven-hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/raven-banner.jpg') no-repeat center center; /* Replace with your Raven specific banner image */
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/547287666_727743953553449_4477259921234447522_nFGlobal-Exploree-LVN507-PTY-cover.jpg') no-repeat center center; /* Replace with your Raven specific banner image */
     background-size: cover;
     height: 100vh;
     display: flex;

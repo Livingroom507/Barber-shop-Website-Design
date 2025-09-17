@@ -315,12 +315,20 @@ var scroll = new SmoothScroll('a[href*="#"]', {
         bookingMessageEl.style.color = 'orange';
 
         const formData = new FormData(appointmentForm);
+        const appointmentTimeValue = formData.get('availableTimes');
+
+        // Add client-side validation to ensure a time is selected.
+        if (!appointmentTimeValue) {
+            bookingMessageEl.textContent = 'Please select an available time slot.';
+            bookingMessageEl.style.color = 'red';
+            return; // Stop the function if no time is chosen
+        }
+
         const data = {
             clientName: formData.get('clientName'),
             clientEmail: formData.get('clientEmail'),
             service: formData.get('service'),
-            appointmentTime: formData.get('availableTimes'), // This will be the ISO string
-            durationMinutes: 60 // Assuming a default of 60 minutes for now
+            appointmentTime: appointmentTimeValue, // This will be the ISO string
         };
 
         try {

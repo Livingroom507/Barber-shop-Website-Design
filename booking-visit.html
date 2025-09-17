@@ -259,11 +259,12 @@ var scroll = new SmoothScroll('a[href*="#"]', {
     function renderCalendar() {
         calendarEl.innerHTML = ''; // Clear previous calendar
         const year = currentDisplayDate.getFullYear();
-        const month = currentDisplayDate.getMonth();
+        const month = currentDisplayDate.getMonth(); // 0-11
         currentMonthYearEl.textContent = `${currentDisplayDate.toLocaleString('default', { month: 'long' })} ${year}`;
 
-        const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 = Sunday, 1 = Monday, etc.
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        // Use UTC for calendar calculations to avoid timezone bugs
+        const firstDayOfMonth = new Date(Date.UTC(year, month, 1)).getUTCDay(); // 0=Sun, 1=Mon...
+        const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
 
         const calendarGrid = document.createElement('div');
         calendarGrid.classList.add('calendar-grid');
@@ -280,11 +281,12 @@ var scroll = new SmoothScroll('a[href*="#"]', {
             dayEl.textContent = day;
             dayEl.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const currentDay = new Date(year, month, day);
+            // Compare dates in UTC to avoid timezone issues. This ensures "today" is consistent for all users.
+            const todayFull = new Date();
+            const todayUTCStart = new Date(Date.UTC(todayFull.getUTCFullYear(), todayFull.getUTCMonth(), todayFull.getUTCDate()));
+            const currentDayUTC = new Date(Date.UTC(year, month, day));
 
-            if (currentDay < today) {
+            if (currentDayUTC < todayUTCStart) {
                 dayEl.classList.add('past-day');
             } else {
                 dayEl.addEventListener('click', () => {

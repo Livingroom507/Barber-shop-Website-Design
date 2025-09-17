@@ -33,9 +33,12 @@ router.get('/availability', async (request, env) => {
     const requestedDate = new Date(date + 'T00:00:00Z'); // Treat date as UTC
 
     try {
-        // 1. Get all existing appointments for the requested date from D1
-        const query = 'SELECT start_time FROM Appointments WHERE date(start_time) = ?';
-        const { results } = await env.DB.prepare(query).bind(date).all();
+        // 1. Get all existing appointments for the requested date from D1 using a more robust range query.
+        // This avoids potential issues with the date() function and timezones.
+        const dayStart = date + "T00:00:00Z";
+        const dayEnd = date + "T23:59:59Z";
+        const query = 'SELECT start_time FROM Appointments WHERE start_time BETWEEN ? AND ?';
+        const { results } = await env.DB.prepare(query).bind(dayStart, dayEnd).all();
         const bookedTimes = new Set(results.map(r => new Date(r.start_time).getUTCHours()));
 
         // 2. Generate all possible slots for the day

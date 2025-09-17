@@ -226,10 +226,10 @@ var scroll = new SmoothScroll('a[href*="#"]', {
 
     let currentDisplayDate = new Date(); // Tracks the month currently displayed in the calendar
 
-    async function fetchAvailability(date) {
-        const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    async function fetchAvailability(dateString) {
+        // dateString is already in YYYY-MM-DD format, avoiding timezone issues.
         try {
-            const response = await fetch(`/api/availability?date=${formattedDate}`);
+            const response = await fetch(`/api/availability?date=${dateString}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -239,7 +239,7 @@ var scroll = new SmoothScroll('a[href*="#"]', {
                 availableTimesSelect.disabled = false;
                 times.forEach(time => {
                     const option = document.createElement('option');
-                    option.value = `${formattedDate}T${time}:00Z`; // ISO format for backend
+                    option.value = `${dateString}T${time}:00Z`; // ISO format for backend
                     option.textContent = time;
                     availableTimesSelect.appendChild(option);
                 });
@@ -291,7 +291,7 @@ var scroll = new SmoothScroll('a[href*="#"]', {
                     document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
                     dayEl.classList.add('selected');
                     selectedDateInput.value = dayEl.dataset.date;
-                    fetchAvailability(new Date(dayEl.dataset.date));
+                    fetchAvailability(dayEl.dataset.date);
                 });
             }
             calendarGrid.appendChild(dayEl);
@@ -345,7 +345,7 @@ var scroll = new SmoothScroll('a[href*="#"]', {
                 appointmentForm.reset();
                 // Re-fetch availability for the selected date to update the display
                 if (selectedDateInput.value) {
-                    fetchAvailability(new Date(selectedDateInput.value));
+                    fetchAvailability(selectedDateInput.value);
                 }
             } else {
                 bookingMessageEl.textContent = `Error: ${result.message || 'Failed to book appointment'}`;

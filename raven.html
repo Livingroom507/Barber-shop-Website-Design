@@ -131,8 +131,11 @@
         <div class="contact-form-container">
             <p>Be the first to know about exclusive offers, new styles, and special events!</p>
             <form id="leadCaptureForm">
+                <label for="leadName" class="sr-only">Your Name</label>
                 <input type="text" id="leadName" name="name" placeholder="Your Name" required>
+                <label for="leadEmail" class="sr-only">Your Email</label>
                 <input type="email" id="leadEmail" name="email" placeholder="Your Email" required>
+                <label for="leadMessage" class="sr-only">Message</label>
                 <textarea id="leadMessage" name="message" rows="4" placeholder="Optional: Tell us what you're looking for!"></textarea>
                 <button type="submit" class="btn-primary">Sign Me Up!</button>
                 <p id="leadMessageStatus"></p>

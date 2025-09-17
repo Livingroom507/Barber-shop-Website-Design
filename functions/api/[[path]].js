@@ -24,6 +24,12 @@ function getBusinessConfig() {
  * Returns a list of available time slots for a given date.
  */
 router.get('/availability', async (request, env) => {
+    // Add a check to ensure the D1 Database is bound.
+    if (!env.DB) {
+        console.error("D1 Database binding not found. Please set up the 'DB' binding in your Cloudflare dashboard's Pages settings.");
+        return jsonResponse({ message: 'Database not connected.' }, { status: 500 });
+    }
+
     const { date } = request.query;
     if (!date) {
         return jsonResponse({ message: 'Date query parameter is required.' }, { status: 400 });

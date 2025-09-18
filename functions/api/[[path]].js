@@ -64,7 +64,8 @@ router.get('/availability', async (request, env) => {
         return jsonResponse(availableSlots);
     } catch (e) {
         console.error("Availability Error:", e);
-        return jsonResponse({ message: 'Error fetching availability.' }, { status: 500 });
+        // Return the actual database error message to the client for debugging.
+        return jsonResponse({ message: e.cause?.message || e.message || 'Error fetching availability.' }, { status: 500 });
     }
 });
 

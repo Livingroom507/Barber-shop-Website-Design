@@ -1,0 +1,14 @@
+{
+  "name": "barber-shop-website-design",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler pages deploy source-folder"
+  },
+  "dependencies": {
+    "itty-router": "^4.0.23"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

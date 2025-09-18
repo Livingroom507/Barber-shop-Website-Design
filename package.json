@@ -1,0 +1,8 @@
+{
+  "name": "barber-shop-website-design",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "itty-router": "^5.0.5"
+  }
+}

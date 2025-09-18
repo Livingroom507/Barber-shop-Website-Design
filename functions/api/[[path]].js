@@ -1,7 +1,7 @@
 // A lightweight router for Cloudflare Workers
 import { Router } from 'itty-router';
 
-const router = Router({ base: '/api' });
+const router = Router();
 
 // Helper function for consistent JSON responses
 const jsonResponse = (data, options = {}) => {
@@ -23,7 +23,7 @@ function getBusinessConfig() {
  * GET /api/availability?date=YYYY-MM-DD
  * Returns a list of available time slots for a given date.
  */
-router.get('/availability', async (request, env) => {
+router.get('/api/availability', async (request, env) => {
     // Add a check to ensure the D1 Database is bound.
     if (!env.DB) {
         console.error("D1 Database binding not found. Please set up the 'DB' binding in your Cloudflare dashboard's Pages settings.");
@@ -73,7 +73,7 @@ router.get('/availability', async (request, env) => {
  * POST /api/book-appointment
  * Creates a new appointment in the database.
  */
-router.post('/book-appointment', async (request, env) => {
+router.post('/api/book-appointment', async (request, env) => {
     try {
         const { clientName, clientEmail, service, appointmentTime } = await request.json();
 
@@ -127,7 +127,7 @@ router.post('/book-appointment', async (request, env) => {
  * POST /api/capture-lead
  * Captures a lead from the Raven landing page.
  */
-router.post('/capture-lead', async (request, env) => {
+router.post('/api/capture-lead', async (request, env) => {
     try {
         const { name, email, message } = await request.json();
 

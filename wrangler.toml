@@ -1,0 +1,11 @@
+name = "barber-shop-website-design"
+compatibility_date = "2023-10-26"
+
+# This property tells wrangler that this is a Pages project
+# and where to find the static assets for local development.
+pages_build_output_dir = "source-folder"
+
+[[d1_databases]]
+binding = "DB" # This is the name you'll use in your Worker code to access the database.
+database_name = "barbershop-db"
+database_id = "ca51dc60-bde4-4bbd-bedf-fdc5ddfd56a3"

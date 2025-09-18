@@ -24,6 +24,7 @@ function getBusinessConfig() {
  * Returns a list of available time slots for a given date.
  */
 router.get('/api/availability', async (request, env) => {
+    console.log("Entered /api/availability handler.");
     // Add a check to ensure the D1 Database is bound.
     if (!env.DB) {
         console.error("D1 Database binding not found. Please set up the 'DB' binding in your Cloudflare dashboard's Pages settings.");
@@ -150,9 +151,18 @@ router.post('/api/capture-lead', async (request, env) => {
 
 
 // Fallback for all other requests
-router.all('*', (request) => jsonResponse({ message: `Not Found: ${request.method} ${request.url}` }, { status: 404 }));
+router.all('*', (request) => {
+    console.log(`Fallback route hit for: ${request.method} ${request.url}`);
+    return jsonResponse({ message: `Not Found: ${request.method} ${request.url}` }, { status: 404 });
+});
 
 // Export the handler for Cloudflare Pages Functions
 export function onRequest(context) {
-    return router.handle(context.request, context.env, context);
+    console.log(`onRequest invoked for: ${context.request.method} ${context.request.url}`);
+    try {
+        return router.handle(context.request, context.env, context);
+    } catch (e) {
+        console.error("Error in router handling:", e);
+        return new Response("Internal Server Error", { status: 500 });
+    }
 }

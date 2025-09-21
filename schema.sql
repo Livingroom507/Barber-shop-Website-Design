@@ -7,27 +7,31 @@ DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS Leads;
 
 -- To store information about your clients/users
+
 CREATE TABLE Clients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    phone TEXT,
-    referral_code TEXT NOT NULL UNIQUE,
-    referred_by_id INTEGER, -- References another Client's id
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (referred_by_id) REFERENCES Clients(id)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  phone TEXT,
+  referral_code TEXT,
+  referred_by TEXT,
+  membership_level TEXT DEFAULT 'STANDARD',
+  loyalty_points INTEGER DEFAULT 0,
+  role TEXT DEFAULT 'USER',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- To store all haircut/service appointments
 CREATE TABLE Appointments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    client_id INTEGER NOT NULL,
-    service_name TEXT NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    status TEXT DEFAULT 'CONFIRMED', -- e.g., CONFIRMED, CANCELLED
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES Clients(id)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  client_id INTEGER NOT NULL,
+  service TEXT NOT NULL,
+  start_time TIMESTAMP NOT NULL,
+  end_time TIMESTAMP,
+  status TEXT DEFAULT 'PENDING',
+  recurrence TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (client_id) REFERENCES Clients(id)
 );
 
 -- To store information about events
@@ -71,6 +75,101 @@ CREATE TABLE Leads (
     message TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE Notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    type TEXT, -- e.g., 'APPOINTMENT', 'EVENT', 'GENERAL'
+    FOREIGN KEY (client_id) REFERENCES Clients(id)
+);
+
+CREATE TABLE Feedback (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    event_id INTEGER,
+    appointment_id INTEGER,
+    rating INTEGER CHECK(rating >= 1 AND rating <= 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (event_id) REFERENCES Events(id),
+    FOREIGN KEY (appointment_id) REFERENCES Appointments(id)
+);
+
+CREATE TABLE AuditLog (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER,
+    action TEXT NOT NULL,
+    details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES Clients(id)
+);
+
+CREATE TABLE Badges (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE ClientBadges (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    badge_id INTEGER NOT NULL,
+    awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (badge_id) REFERENCES Badges(id)
+);
+
+-- Waitlist for appointments/events
+CREATE TABLE IF NOT EXISTS Waitlist (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    appointment_id INTEGER,
+    event_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (appointment_id) REFERENCES Appointments(id),
+    FOREIGN KEY (event_id) REFERENCES Events(id)
+);
+
+-- Recurring appointments
+ALTER TABLE Appointments ADD COLUMN recurrence TEXT;
+
+-- Referral rewards tracking
+CREATE TABLE ReferralRewards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    referrer_id INTEGER NOT NULL,
+    referred_id INTEGER NOT NULL,
+    reward_status TEXT DEFAULT 'PENDING',
+    rewarded_at TIMESTAMP,
+    FOREIGN KEY (referrer_id) REFERENCES Clients(id),
+    FOREIGN KEY (referred_id) REFERENCES Clients(id)
+);
+
+-- User roles
+ALTER TABLE Clients ADD COLUMN role TEXT DEFAULT 'USER';
+
+-- Badges and client badges
+CREATE TABLE ClientBadges (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    badge_id INTEGER NOT NULL,
+    awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (badge_id) REFERENCES Badges(id)
+);
+
+-- Event categories
+ALTER TABLE Events ADD COLUMN category TEXT;
+ALTER TABLE Clients ADD COLUMN membership_level TEXT DEFAULT 'STANDARD';
+ALTER TABLE Clients ADD COLUMN loyalty_points INTEGER DEFAULT 0;
+ALTER TABLE Appointments ADD COLUMN recurrence TEXT; -- e.g., 'WEEKLY', 'MONTHLY'
+ALTER TABLE Clients ADD COLUMN role TEXT DEFAULT 'USER'; -- USER, AFFILIATE, ADMIN
+
+
+
 
 -- Optional: Create an index for faster lookups on appointment start times
 CREATE INDEX idx_appointments_start_time ON Appointments(start_time);

@@ -41,79 +41,75 @@
 </div>
 
 <!--Features-->
-<section id="feature">
+
+<section id="admin-event-creation" style="padding: 40px;">
     <div class="title-text">
-        <p>LIVINGROOM507MOC's FEATURES</p>   
-        <h1>Why Choose Us</h1>
+        <p>LIVINGROOM507MOC's ADMIN</p>
+        <h1>Create a New Event</h1>
     </div>
-    <section id="admin-event-creation" style="padding: 40px;">
-        <div class="title-text">
-            <p>ADMIN</p>
-            <h1>Create a New Event</h1>
-        </div>
-        <div class="contact-form-container">
-            <form id="createEventForm">
-                <label for="eventName">Event Name</label>
-                <input type="text" id="eventName" name="name" required>
+    <div class="contact-form-container">
+        <form id="createEventForm">
+            <label for="eventName">Event Name</label>
+            <input type="text" id="eventName" name="name" required>
 
-                <label for="eventDescription">Event Description</label>
-                <textarea id="eventDescription" name="description" rows="4"></textarea>
+            <label for="eventDescription">Event Description</label>
+            <textarea id="eventDescription" name="description" rows="4"></textarea>
 
-                <label for="eventDate">Event Date</label>
-                <input type="datetime-local" id="eventDate" name="event_date" required>
+            <label for="eventDate">Event Date</label>
+            <input type="datetime-local" id="eventDate" name="event_date" required>
 
-                <label for="eventLocation">Event Location</label>
-                <input type="text" id="eventLocation" name="location" required>
+            <label for="eventLocation">Event Location</label>
+            <input type="text" id="eventLocation" name="location" required>
 
-                <label for="totalTickets">Total Tickets</label>
-                <input type="number" id="totalTickets" name="total_tickets" required>
+            <label for="totalTickets">Total Tickets</label>
+            <input type="number" id="totalTickets" name="total_tickets" required>
 
-                <button type="submit" class="btn-primary">Create Event</button>
-                <p id="formStatus"></p>
-            </form>
-        </div>
-    </section>
+            <button type="submit" class="btn-primary">Create Event</button>
+            <p id="formStatus"></p>
+        </form>
+    </div>
+</section>
 
-    <script>
-        document.getElementById('createEventForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const form = event.target;
-            const statusMessage = document.getElementById('formStatus');
-            statusMessage.textContent = 'Creating event...';
+<script>
+    document.getElementById('createEventForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const form = event.target;
+        const statusMessage = document.getElementById('formStatus');
+        statusMessage.textContent = 'Creating event...';
 
-            const formData = new FormData(form);
-            const data = {
-                name: formData.get('name'),
-                description: formData.get('description'),
-                event_date: formData.get('event_date'),
-                location: formData.get('location'),
-                total_tickets: parseInt(formData.get('total_tickets'), 10)
-            };
+        const formData = new FormData(form);
+        const data = {
+            name: formData.get('name'),
+            description: formData.get('description'),
+            event_date: formData.get('event_date'),
+            location: formData.get('location'),
+            total_tickets: parseInt(formData.get('total_tickets'), 10)
+        };
 
-            try {
-                const response = await fetch('/api/create-event', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
+        try {
+            const response = await fetch('/api/create-event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-                const result = await response.json();
-                if (response.ok) {
-                    statusMessage.textContent = 'Event created successfully!';
-                    statusMessage.style.color = 'green';
-                    form.reset();
-                } else {
-                    statusMessage.textContent = `Error: ${result.message || 'Failed to create event.'}`;
-                    statusMessage.style.color = 'red';
-                }
-            } catch (error) {
-                console.error('Event creation error:', error);
-                statusMessage.textContent = 'An unexpected error occurred.';
+            const result = await response.json();
+            if (response.ok) {
+                statusMessage.textContent = 'Event created successfully!';
+                statusMessage.style.color = 'green';
+                form.reset();
+            } else {
+                statusMessage.textContent = `Error: ${result.message || 'Failed to create event.'}`;
                 statusMessage.style.color = 'red';
             }
-        });
-    </script>
+        } catch (error) {
+            console.error('Event creation error:', error);
+            statusMessage.textContent = 'An unexpected error occurred.';
+            statusMessage.style.color = 'red';
+        }
+    });
+</script>
 </body>
 </html>

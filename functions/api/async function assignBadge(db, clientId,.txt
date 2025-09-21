@@ -1,0 +1,21 @@
+async function assignBadge(db, clientId, badgeId) {
+  const stmt = db.prepare(
+    `INSERT INTO ClientBadges (client_id, badge_id) VALUES (?, ?)`
+  );
+  await stmt.bind(clientId, badgeId).run();
+  return { success: true, message: "Badge assigned." };
+}
+
+// Example API endpoint
+async function handleRequest(request, env) {
+  const url = new URL(request.url);
+
+  if (url.pathname === "/api/assign-badge" && request.method === "POST") {
+    const { client_id, badge_id } = await request.json();
+    return Response.json(
+      await assignBadge(env.DB, client_id, badge_id)
+    );
+  }
+
+  // ...other endpoints...
+}

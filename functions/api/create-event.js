@@ -50,3 +50,25 @@ export async function onRequest(context) {
         });
     }
 }
+
+async function addToWaitlist(db, clientId, appointmentId = null, eventId = null) {
+  const stmt = db.prepare(
+    `INSERT INTO Waitlist (client_id, appointment_id, event_id) VALUES (?, ?, ?)`
+  );
+  await stmt.bind(clientId, appointmentId, eventId).run();
+  return { success: true, message: "Added to waitlist." };
+}
+
+// Example API endpoint
+async function handleRequest(request, env) {
+  const url = new URL(request.url);
+
+  if (url.pathname === "/api/waitlist" && request.method === "POST") {
+    const { client_id, appointment_id, event_id } = await request.json();
+    return Response.json(
+      await addToWaitlist(env.DB, client_id, appointment_id, event_id)
+    );
+  }
+
+  // ...other endpoints...
+}

@@ -1,23 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Profile - Barber Shop</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile - Hair Care Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
 </head>
 <body>
-  <section class="profile-section">
-    <h2>Your Profile</h2>
-    <div id="profile-info"></div>
-    <h3>Your Appointments</h3>
-    <div id="appointments-list"></div>
-    <h3>Your Event Bookings</h3>
-    <div id="events-list"></div>
-    <!-- Add more profile features here -->
-  </section>
-  <script>
-    // Fetch and display user info, appointments, events, etc.
-  </script>
+    <div id="sideNav">
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="A-Team.html">A-TEAM</a></li>
+                <li><a href="profile.html">PROFILE</a></li>
+                <li><a href="booking-visit.html">BOOKING</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="menuBtn">
+        <img src="images/menu-1.png" id="menu" alt="">
+    </div>
+
+    <section id="profile-hero">
+        <div class="hero-content">
+            <h1>Your Profile</h1>
+        </div>
+    </section>
+
+    <section class="profile-section">
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <img src="images/placeholder-profile.png" alt="Profile Picture" class="profile-picture">
+                <h3>John Doe</h3>
+            </div>
+            <div class="profile-main">
+                <div class="profile-info">
+                    <h2>About Me</h2>
+                    <p>This is a public bio. Members can write a short description about themselves here.</p>
+                </div>
+                <div class="profile-settings">
+                    <h3>Profile Settings</h3>
+                    <div class="setting">
+                        <label for="public-profile">Make my profile public</label>
+                        <label class="switch">
+                            <input type="checkbox" id="public-profile">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <label for="public-image">Make my image public</label>
+                        <label class="switch">
+                            <input type="checkbox" id="public-image">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="appointments-list">
+                    <h3>Your Appointments</h3>
+                    <!-- Appointments will be listed here -->
+                </div>
+                <div id="events-list">
+                    <h3>Your Event Bookings</h3>
+                    <!-- Events will be listed here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Side Nav
+            var menuBtn = document.getElementById("menuBtn")
+            var sideNav = document.getElementById("sideNav")
+            var menu = document.getElementById("menu")
+
+            sideNav.style.right = "-250px";
+
+            menuBtn.onclick = function(){
+                if(sideNav.style.right == "-250px"){
+                    sideNav.style.right = "0";
+                    menu.src = "images/close.png";
+                }
+                else{
+                    sideNav.style.right = "-250px";
+                    menu.src = "images/menu-1.png";
+                }
+            }
+
+            // --- Profile Data Fetching and Display ---
+
+            // Function to fetch profile data
+            async function fetchProfileData() {
+                try {
+                    const response = await fetch('/api/profile'); // Assumes a backend endpoint
+                    if (!response.ok) {
+                        throw new Error('Could not fetch profile data.');
+                    }
+                    const data = await response.json();
+                    updateProfile(data);
+                } catch (error) {
+                    console.error('Error fetching profile data:', error);
+                    // Display an error message to the user
+                }
+            }
+
+            // Function to fetch appointments
+            async function fetchAppointments() {
+                try {
+                    const response = await fetch('/api/appointments'); // Assumes a backend endpoint
+                    if (!response.ok) {
+                        throw new Error('Could not fetch appointments.');
+                    }
+                    const data = await response.json();
+                    updateAppointments(data);
+                } catch (error) {
+                    console.error('Error fetching appointments:', error);
+                }
+            }
+
+            // Function to fetch event bookings
+            async function fetchEventBookings() {
+                try {
+                    const response = await fetch('/api/events'); // Assumes a backend endpoint
+                    if (!response.ok) {
+                        throw new Error('Could not fetch event bookings.');
+                    }
+                    const data = await response.json();
+                    updateEventBookings(data);
+                } catch (error) {
+                    console.error('Error fetching event bookings:', error);
+                }
+            }
+
+            // Function to update the profile display
+            function updateProfile(data) {
+                document.querySelector('.profile-picture').src = data.profile_image_url || 'images/placeholder-profile.png';
+                document.querySelector('.profile-sidebar h3').textContent = data.name;
+                document.querySelector('.profile-info p').textContent = data.bio || 'No bio set.';
+                document.getElementById('public-profile').checked = data.is_profile_public;
+                document.getElementById('public-image').checked = data.is_image_public;
+            }
+
+            // Function to update the appointments list
+            function updateAppointments(appointments) {
+                const appointmentsList = document.getElementById('appointments-list');
+                appointmentsList.innerHTML = '<h3>Your Appointments</h3>'; // Clear existing
+                if (appointments.length === 0) {
+                    appointmentsList.innerHTML += '<p>No appointments found.</p>';
+                    return;
+                }
+                const ul = document.createElement('ul');
+                appointments.forEach(appt => {
+                    const li = document.createElement('li');
+                    li.textContent = `${appt.service} on ${new Date(appt.start_time).toLocaleDateString()}`;
+                    ul.appendChild(li);
+                });
+                appointmentsList.appendChild(ul);
+            }
+
+            // Function to update the event bookings list
+            function updateEventBookings(events) {
+                const eventsList = document.getElementById('events-list');
+                eventsList.innerHTML = '<h3>Your Event Bookings</h3>'; // Clear existing
+                if (events.length === 0) {
+                    eventsList.innerHTML += '<p>No event bookings found.</p>';
+                    return;
+                }
+                const ul = document.createElement('ul');
+                events.forEach(event => {
+                    const li = document.createElement('li');
+                    li.textContent = `${event.name} on ${new Date(event.event_date).toLocaleDateString()}`;
+                    ul.appendChild(li);
+                });
+                eventsList.appendChild(ul);
+            }
+
+            // --- Profile Settings Update ---
+
+            const publicProfileToggle = document.getElementById('public-profile');
+            const publicImageToggle = document.getElementById('public-image');
+
+            async function updateSettings() {
+                const settings = {
+                    is_profile_public: publicProfileToggle.checked,
+                    is_image_public: publicImageToggle.checked
+                };
+                try {
+                    const response = await fetch('/api/profile/settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(settings)
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to update settings.');
+                    }
+                    console.log('Settings updated successfully.');
+                } catch (error) {
+                    console.error('Error updating settings:', error);
+                }
+            }
+
+            publicProfileToggle.addEventListener('change', updateSettings);
+            publicImageToggle.addEventListener('change', updateSettings);
+
+            // Initial data fetch
+            fetchProfileData();
+            fetchAppointments();
+            fetchEventBookings();
+        });
+    </script>
 </body>
 </html>

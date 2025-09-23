@@ -171,5 +171,10 @@ ALTER TABLE Clients ADD COLUMN role TEXT DEFAULT 'USER'; -- USER, AFFILIATE, ADM
 
 
 
--- Optional: Create an index for faster lookups on appointment start times
-CREATE INDEX idx_appointments_start_time ON Appointments(start_time);
+
+
+-- Commands to add columns for the new profile page features
+ALTER TABLE Clients ADD COLUMN bio TEXT;
+ALTER TABLE Clients ADD COLUMN profile_image_url TEXT;
+ALTER TABLE Clients ADD COLUMN is_profile_public INTEGER DEFAULT 0; -- 0 for private, 1 for public
+ALTER TABLE Clients ADD COLUMN is_image_public INTEGER DEFAULT 0; -- 0 for private, 1 for public

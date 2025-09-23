@@ -1,51 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Login - Barber Shop</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Hair Care Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login-style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
 </head>
 <body>
-  <section class="login-section">
-    <h2>Login</h2>
-    <form id="login-form">
-      <input type="email" name="email" placeholder="Email" required>
-      <input type="password" name="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-      <p id="loginStatus"></p>
-    </form>
-  </section>
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const form = event.target;
-      const status = document.getElementById('loginStatus');
-      status.textContent = 'Logging in...';
-      const data = {
-        email: form.email.value,
-        password: form.password.value
-      };
-      try {
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+    <div id="sideNav">
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="A-Team.html">A-TEAM</a></li>
+                <li><a href="login.html">LOGIN</a></li>
+                <li><a href="booking-visit.html">BOOKING</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="menuBtn">
+        <img src="images/menu-1.png" id="menu" alt="">
+    </div>
+
+    <section id="login-hero">
+        <div class="hero-content">
+            <h1>Member Access</h1>
+        </div>
+    </section>
+
+    <section class="login-section">
+        <form id="login-form">
+            <h2>Login</h2>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+            <p id="loginStatus"></p>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const status = document.getElementById('loginStatus');
+            status.textContent = 'Logging in...';
+            const data = {
+                email: form.email.value,
+                password: form.password.value
+            };
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    status.textContent = 'Login successful!';
+                    // Redirect based on role
+                    if (result.role === 'ADMIN') window.location.href = 'admin.html';
+                    else if (result.role === 'AFFILIATE') window.location.href = 'A-Team.html';
+                    else window.location.href = 'profile.html';
+                } else {
+                    status.textContent = result.message || 'Login failed.';
+                }
+            } catch (err) {
+                status.textContent = 'Error logging in.';
+            }
         });
-        const result = await response.json();
-        if (response.ok) {
-          status.textContent = 'Login successful!';
-          // Redirect based on role
-          if (result.role === 'ADMIN') window.location.href = 'admin.html';
-          else if (result.role === 'AFFILIATE') window.location.href = 'affiliate.html';
-          else window.location.href = 'profile.html';
-        } else {
-          status.textContent = result.message || 'Login failed.';
+
+        // Side Nav
+        var menuBtn = document.getElementById("menuBtn")
+        var sideNav = document.getElementById("sideNav")
+        var menu = document.getElementById("menu")
+
+        sideNav.style.right = "-250px";
+
+        menuBtn.onclick = function(){
+            if(sideNav.style.right == "-250px"){
+                sideNav.style.right = "0";
+                menu.src = "images/close.png";
+            }
+            else{
+                sideNav.style.right = "-250px";
+                menu.src = "images/menu-1.png";
+            }
         }
-      } catch (err) {
-        status.textContent = 'Error logging in.';
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>

@@ -135,8 +135,6 @@ CREATE TABLE IF NOT EXISTS Waitlist (
     FOREIGN KEY (event_id) REFERENCES Events(id)
 );
 
--- Recurring appointments
-ALTER TABLE Appointments ADD COLUMN recurrence TEXT;
 
 -- Referral rewards tracking
 CREATE TABLE ReferralRewards (
@@ -164,10 +162,7 @@ CREATE TABLE ClientBadges (
 
 -- Event categories
 ALTER TABLE Events ADD COLUMN category TEXT;
-ALTER TABLE Clients ADD COLUMN membership_level TEXT DEFAULT 'STANDARD';
-ALTER TABLE Clients ADD COLUMN loyalty_points INTEGER DEFAULT 0;
-ALTER TABLE Appointments ADD COLUMN recurrence TEXT; -- e.g., 'WEEKLY', 'MONTHLY'
-ALTER TABLE Clients ADD COLUMN role TEXT DEFAULT 'USER'; -- USER, AFFILIATE, ADMIN
+
 
 
 

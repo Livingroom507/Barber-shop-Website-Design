@@ -147,26 +147,6 @@ CREATE TABLE ReferralRewards (
     FOREIGN KEY (referred_id) REFERENCES Clients(id)
 );
 
--- User roles
-ALTER TABLE Clients ADD COLUMN role TEXT DEFAULT 'USER';
-
--- Badges and client badges
-CREATE TABLE ClientBadges (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    client_id INTEGER NOT NULL,
-    badge_id INTEGER NOT NULL,
-    awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES Clients(id),
-    FOREIGN KEY (badge_id) REFERENCES Badges(id)
-);
-
--- Event categories
-ALTER TABLE Events ADD COLUMN category TEXT;
-
-
-
-
-
 
 
 -- Commands to add columns for the new profile page features

@@ -17,6 +17,7 @@ CREATE TABLE Clients (
   referred_by TEXT,
   membership_level TEXT DEFAULT 'STANDARD',
   loyalty_points INTEGER DEFAULT 0,
+  password TEXT NOT NULL,
   role TEXT DEFAULT 'USER',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

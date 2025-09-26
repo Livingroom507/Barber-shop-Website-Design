@@ -155,5 +155,3 @@ ALTER TABLE Clients ADD COLUMN profile_image_url TEXT;
 ALTER TABLE Clients ADD COLUMN is_profile_public INTEGER DEFAULT 0; -- 0 for private, 1 for public
 ALTER TABLE Clients ADD COLUMN is_image_public INTEGER DEFAULT 0; -- 0 for private, 1 for public
 
--- Add password column for authentication
-ALTER TABLE Clients ADD COLUMN password TEXT;

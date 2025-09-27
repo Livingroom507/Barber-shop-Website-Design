@@ -19,6 +19,10 @@ CREATE TABLE Clients (
   loyalty_points INTEGER DEFAULT 0,
   password TEXT NOT NULL,
   role TEXT DEFAULT 'USER',
+  bio TEXT,
+  profile_image_url TEXT,
+  is_profile_public INTEGER DEFAULT 0,
+  is_image_public INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -146,12 +150,4 @@ CREATE TABLE ReferralRewards (
     FOREIGN KEY (referrer_id) REFERENCES Clients(id),
     FOREIGN KEY (referred_id) REFERENCES Clients(id)
 );
-
-
-
--- Commands to add columns for the new profile page features
-ALTER TABLE Clients ADD COLUMN bio TEXT;
-ALTER TABLE Clients ADD COLUMN profile_image_url TEXT;
-ALTER TABLE Clients ADD COLUMN is_profile_public INTEGER DEFAULT 0; -- 0 for private, 1 for public
-ALTER TABLE Clients ADD COLUMN is_image_public INTEGER DEFAULT 0; -- 0 for private, 1 for public
 

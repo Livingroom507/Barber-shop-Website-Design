@@ -1,4 +1,3 @@
-
 // Helper function for consistent JSON responses
 const jsonResponse = (data, options = {}) => {
     return new Response(JSON.stringify(data), {
@@ -12,25 +11,18 @@ const jsonResponse = (data, options = {}) => {
  * Fetches a list of appointments for the currently authenticated user.
  */
 export async function onRequestGet(context) {
-    const { env, data } = context;
-
-    // Assumes authentication middleware
-    if (!data.user || !data.user.id) {
-        return jsonResponse({ message: 'Authentication required.' }, { status: 401 });
+    const { env, request } = context;
+    const url = new URL(request.url);
+    const email = url.searchParams.get('email');
+    if (!email) {
+        return new Response(JSON.stringify({ message: "Email required" }), { status: 400 });
     }
-
-    const userId = data.user.id;
-
-    try {
-        // Fetch all appointments for the given client_id
-        const { results } = await env.DB.prepare(
-            'SELECT service, start_time FROM Appointments WHERE client_id = ? ORDER BY start_time DESC'
-        ).bind(userId).all();
-
-        return jsonResponse(results || []);
-
-    } catch (e) {
-        console.error("Appointments Fetch Error:", e);
-        return jsonResponse({ message: 'An error occurred while fetching appointments.' }, { status: 500 });
+    const user = await env.DB.prepare("SELECT id FROM Clients WHERE email = ?").bind(email).first();
+    if (!user) {
+        return new Response(JSON.stringify({ message: "User not found" }), { status: 404 });
     }
+    const appointments = await env.DB.prepare(
+        "SELECT * FROM Appointments WHERE client_id = ?"
+    ).bind(user.id).all();
+    return new Response(JSON.stringify(appointments.results), { headers: { "Content-Type": "application/json" } });
 }

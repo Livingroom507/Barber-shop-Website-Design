@@ -1,4 +1,3 @@
-
 // Helper function for consistent JSON responses
 const jsonResponse = (data, options = {}) => {
     return new Response(JSON.stringify(data), {
@@ -52,7 +51,7 @@ export async function onRequestPost(context) {
             return jsonResponse({ message: 'This time slot was just booked. Please select another time.' }, { status: 409 }); // 409 Conflict
         }
 
-        await env.DB.prepare('INSERT INTO Appointments (client_id, service_name, start_time, end_time) VALUES (?, ?, ?, ?)')
+        await env.DB.prepare('INSERT INTO Appointments (client_id, service, start_time, end_time) VALUES (?, ?, ?, ?)')
             .bind(client.id, service, startTime.toISOString(), endTime.toISOString())
             .run();
 

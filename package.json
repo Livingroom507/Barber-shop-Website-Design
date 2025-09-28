@@ -4,5 +4,8 @@
   "private": true,
   "dependencies": {
     "itty-router": "^5.0.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.2"
   }
 }

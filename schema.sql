@@ -6,6 +6,13 @@ DROP TABLE IF EXISTS Appointments;
 DROP TABLE IF EXISTS Events;
 DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS Leads;
+DROP TABLE IF EXISTS ReferralRewards;
+DROP TABLE IF EXISTS Waitlist;
+DROP TABLE IF EXISTS ClientBadges;
+DROP TABLE IF EXISTS Badges;
+DROP TABLE IF EXISTS AuditLog;
+DROP TABLE IF EXISTS Feedback;
+DROP TABLE IF EXISTS Notifications;
 
 -- To store information about your clients/users
 
@@ -164,4 +171,3 @@ CREATE TABLE ProfileUpdateRequests (
     FOREIGN KEY (client_id) REFERENCES Clients(id),
     FOREIGN KEY (reviewer_id) REFERENCES Clients(id)
 );
-

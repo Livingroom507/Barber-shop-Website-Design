@@ -33,10 +33,12 @@ export async function onRequestPost(context) {
         if (results.length > 0) {
             client = results[0];
         } else {
-            // Create a new client with a unique referral code
+            // Create a new client with a unique referral code and a placeholder password
             const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
-            const { meta } = await env.DB.prepare('INSERT INTO Clients (name, email, referral_code) VALUES (?, ?, ?);')
-                .bind(clientName, clientEmail, referralCode)
+            // In a real app, you would hash this password. For now, a random UUID is a secure placeholder.
+            const placeholderPassword = crypto.randomUUID(); 
+            const { meta } = await env.DB.prepare('INSERT INTO Clients (name, email, password, referral_code) VALUES (?, ?, ?, ?);')
+                .bind(clientName, clientEmail, placeholderPassword, referralCode)
                 .run();
             client = { id: meta.last_row_id };
         }

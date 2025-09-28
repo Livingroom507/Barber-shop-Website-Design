@@ -87,6 +87,28 @@
     </div>
 </section>
 
+<section id="admin-credentials">
+    <div class="title-text">
+        <p>ADMIN</p>
+        <h1>Update Credentials</h1>
+    </div>
+    <div class="contact-form-container">
+        <form id="updateCredentialsForm">
+            <label for="newEmail">New Admin Email (optional)</label>
+            <input type="email" id="newEmail" name="newEmail">
+
+            <label for="newPassword">New Password (optional)</label>
+            <input type="password" id="newPassword" name="newPassword">
+
+            <label for="confirmPassword">Confirm New Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword">
+
+            <button type="submit" class="btn-primary">Update Credentials</button>
+            <p id="credentialsStatus"></p>
+        </form>
+    </div>
+</section>
+
 <script>
     document.getElementById('createEventForm').addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -128,7 +150,7 @@
         }
     });
 
-    // New script for profile approvals
+    // Script for profile approvals
     document.addEventListener('DOMContentLoaded', fetchPendingRequests);
 
     async function fetchPendingRequests() {
@@ -176,9 +198,10 @@
             const requestId = button.dataset.requestId;
             const approvalStatus = document.getElementById('approvalStatus');
             
-            // For now, we need a placeholder for the admin user ID.
-            // In a real app, this would come from the admin's session.
-            const adminUserId = 1; // Placeholder - assuming admin user has ID 1
+            const urlParams = new URLSearchParams(window.location.search);
+            const adminEmail = urlParams.get('email');
+            // This is a placeholder for getting the admin user ID. A more robust solution would be a lookup.
+            const adminUserId = 1; 
 
             button.disabled = true;
             button.textContent = 'Approving...';
@@ -195,7 +218,6 @@
                 if (response.ok) {
                     approvalStatus.textContent = result.message;
                     approvalStatus.style.color = 'green';
-                    // Remove the approved row from the table
                     button.closest('tr').remove();
                 } else {
                     throw new Error(result.message || 'Approval failed.');
@@ -207,6 +229,60 @@
                 button.disabled = false;
                 button.textContent = 'Approve';
             }
+        }
+    });
+
+    // Script for updating admin credentials
+    document.getElementById('updateCredentialsForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const form = event.target;
+        const statusMessage = document.getElementById('credentialsStatus');
+        statusMessage.textContent = 'Updating...';
+
+        const newPassword = form.newPassword.value;
+        const confirmPassword = form.confirmPassword.value;
+        const newEmail = form.newEmail.value;
+
+        if (newPassword && newPassword !== confirmPassword) {
+            statusMessage.textContent = 'Passwords do not match.';
+            statusMessage.style.color = 'red';
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentEmail = urlParams.get('email');
+
+        if (!currentEmail) {
+            statusMessage.textContent = 'Could not identify current admin user. Please log in again.';
+            statusMessage.style.color = 'red';
+            return;
+        }
+
+        const data = {
+            currentEmail: currentEmail,
+            newEmail: newEmail || null,
+            newPassword: newPassword || null
+        };
+
+        try {
+            const response = await fetch('/api/admin/update-credentials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                statusMessage.textContent = 'Credentials updated successfully! Please log in again with your new credentials.';
+                statusMessage.style.color = 'green';
+                form.reset();
+            } else {
+                throw new Error(result.message || 'Failed to update credentials.');
+            }
+        } catch (error) {
+            console.error('Credential update error:', error);
+            statusMessage.textContent = `Error: ${error.message}`;
+            statusMessage.style.color = 'red';
         }
     });
 </script>

@@ -10,16 +10,8 @@
     <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
 </head>    
 <body>
-<section id="banner">
+<section id="banner-admin">
     <img src="images/Logo1.jpg" class="logo" alt="Hair Care Studio Logo">
-    <div class="banner-text">
-        <h1>Hair Care Studio</h1>
-        <p>Livingroom507moc Hair Care Is Styling Your Life</p>
-        <div class="banner-btn">
-            <a href="#feature"><span></span>Check Us Out</a>
-            <a href="#service"><span></span>The Landscape</a>
-        </div>
-    </div>
 </section>
 
 <div id="sideNav">
@@ -42,7 +34,7 @@
 
 <!--Features-->
 
-<section id="admin-event-creation" style="padding: 40px;">
+<section id="admin-event-creation">
     <div class="title-text">
         <p>LIVINGROOM507MOC's ADMIN</p>
         <h1>Create a New Event</h1>
@@ -67,6 +59,31 @@
             <button type="submit" class="btn-primary">Create Event</button>
             <p id="formStatus"></p>
         </form>
+    </div>
+</section>
+
+<section id="admin-approval">
+    <div class="title-text">
+        <p>ADMIN</p>
+        <h1>Approve Profile Updates</h1>
+    </div>
+    <div class="approval-container">
+        <table id="approvalTable">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Client Name</th>
+                    <th>Client Email</th>
+                    <th>Requested Changes</th>
+                    <th>Date Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="approvalBody">
+                <!-- Rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <p id="approvalStatus"></p>
     </div>
 </section>
 
@@ -108,6 +125,88 @@
             console.error('Event creation error:', error);
             statusMessage.textContent = 'An unexpected error occurred.';
             statusMessage.style.color = 'red';
+        }
+    });
+
+    // New script for profile approvals
+    document.addEventListener('DOMContentLoaded', fetchPendingRequests);
+
+    async function fetchPendingRequests() {
+        const approvalBody = document.getElementById('approvalBody');
+        const approvalStatus = document.getElementById('approvalStatus');
+        approvalStatus.textContent = 'Loading requests...';
+
+        try {
+            const response = await fetch('/api/admin/requests');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const requests = await response.json();
+
+            if (requests.length === 0) {
+                approvalStatus.textContent = 'No pending requests.';
+                return;
+            }
+
+            approvalBody.innerHTML = ''; // Clear loading message
+            requests.forEach(req => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${req.id}</td>
+                    <td>${req.client_name}</td>
+                    <td>${req.client_email}</td>
+                    <td><pre>${JSON.stringify(JSON.parse(req.requested_changes), null, 2)}</pre></td>
+                    <td>${new Date(req.created_at).toLocaleString()}</td>
+                    <td><button class="btn-approve" data-request-id="${req.id}">Approve</button></td>
+                `;
+                approvalBody.appendChild(row);
+            });
+
+            approvalStatus.textContent = ''; // Clear status message
+        } catch (error) {
+            console.error('Error fetching requests:', error);
+            approvalStatus.textContent = 'Failed to load requests.';
+            approvalStatus.style.color = 'red';
+        }
+    }
+
+    document.getElementById('approvalBody').addEventListener('click', async function(event) {
+        if (event.target.classList.contains('btn-approve')) {
+            const button = event.target;
+            const requestId = button.dataset.requestId;
+            const approvalStatus = document.getElementById('approvalStatus');
+            
+            // For now, we need a placeholder for the admin user ID.
+            // In a real app, this would come from the admin's session.
+            const adminUserId = 1; // Placeholder - assuming admin user has ID 1
+
+            button.disabled = true;
+            button.textContent = 'Approving...';
+
+            try {
+                const response = await fetch('/api/admin/requests', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestId: parseInt(requestId, 10), adminUserId })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    approvalStatus.textContent = result.message;
+                    approvalStatus.style.color = 'green';
+                    // Remove the approved row from the table
+                    button.closest('tr').remove();
+                } else {
+                    throw new Error(result.message || 'Approval failed.');
+                }
+            } catch (error) {
+                console.error('Error approving request:', error);
+                approvalStatus.textContent = `Error: ${error.message}`;
+                approvalStatus.style.color = 'red';
+                button.disabled = false;
+                button.textContent = 'Approve';
+            }
         }
     });
 </script>

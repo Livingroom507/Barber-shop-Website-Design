@@ -1,4 +1,3 @@
-
 #profile-hero {
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/your-profile-image.jpg') no-repeat center center; /* Replace with your profile specific banner image */
     background-size: cover;
@@ -124,4 +123,51 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+/* Styles for Profile Page Enhancements */
+
+.btn-primary {
+    display: inline-block;
+    background: #c7a910ff;
+    color: #fff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background: #b39700;
+}
+
+#update-form-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+}
+
+#profile-update-form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#profile-update-form input[type="text"],
+#profile-update-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#updateStatus {
+    margin-top: 15px;
+    font-weight: bold;
 }

@@ -1,4 +1,5 @@
 -- Drop tables if they exist to allow for a clean slate on re-running the schema.
+DROP TABLE IF EXISTS ProfileUpdateRequests;
 DROP TABLE IF EXISTS EventBookings;
 DROP TABLE IF EXISTS Affiliates;
 DROP TABLE IF EXISTS Appointments;
@@ -149,5 +150,18 @@ CREATE TABLE ReferralRewards (
     rewarded_at TIMESTAMP,
     FOREIGN KEY (referrer_id) REFERENCES Clients(id),
     FOREIGN KEY (referred_id) REFERENCES Clients(id)
+);
+
+-- To store profile update requests that require admin approval
+CREATE TABLE ProfileUpdateRequests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    requested_changes TEXT NOT NULL, -- Stores a JSON object of the changes
+    status TEXT DEFAULT 'PENDING', -- PENDING, APPROVED, REJECTED
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TIMESTAMP,
+    reviewer_id INTEGER, -- Admin who reviewed the request
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (reviewer_id) REFERENCES Clients(id)
 );
 

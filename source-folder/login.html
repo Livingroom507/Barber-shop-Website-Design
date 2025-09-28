@@ -59,10 +59,10 @@
                 const result = await response.json();
                 if (response.ok) {
                     status.textContent = 'Login successful!';
-                    // Redirect based on role
-                    if (result.role === 'ADMIN') window.location.href = 'admin.html';
-                    else if (result.role === 'AFFILIATE') window.location.href = 'A-Team.html';
-                    else window.location.href = 'profile.html';
+                    // Redirect based on role, passing email as a query parameter
+                    if (result.role === 'ADMIN') window.location.href = `admin.html?email=${form.email.value}`;
+                    else if (result.role === 'AFFILIATE') window.location.href = `A-Team.html?email=${form.email.value}`;
+                    else window.location.href = `profile.html?email=${form.email.value}`;
                 } else {
                     status.textContent = result.message || 'Login failed.';
                 }

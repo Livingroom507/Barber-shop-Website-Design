@@ -838,6 +838,18 @@ hr{
 }
 
 /* Admin-specific styles */
+
+#banner-admin {
+    background: linear-gradient(rgba(121, 160, 222, 0.5),#87996f),url(images/Workspace.1.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+.banner-admin p {
+    font-size: 20px;
+    font-style: italic;
+}
 .admin-dashboard, #admin-event-creation {
   background: #f9f9f9;
   border-radius: 8px;

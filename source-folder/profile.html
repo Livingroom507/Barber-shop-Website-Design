@@ -26,43 +26,57 @@
 
     <section id="profile-hero">
         <div class="hero-content">
-            <h1>Your Profile</h1>
+            <h1 id="profile-name-header">Your Profile</h1>
         </div>
     </section>
 
     <section class="profile-section">
         <div class="profile-container">
             <div class="profile-sidebar">
-                <img src="images/placeholder-profile.png" alt="Profile Picture" class="profile-picture">
-                <h3>John Doe</h3>
+                <img src="images/placeholder-profile.png" alt="Profile Picture" class="profile-picture" id="profile-pic">
+                <h3 id="profile-name-sidebar"></h3>
+                <button id="edit-profile-btn" class="btn-primary">Edit Profile</button>
             </div>
             <div class="profile-main">
                 <div class="profile-info">
                     <h2>About Me</h2>
-                    <p>This is a public bio. Members can write a short description about themselves here.</p>
+                    <p id="profile-bio">This is a public bio. Members can write a short description about themselves here.</p>
                 </div>
-                <div class="profile-settings">
-                    <h3>Profile Settings</h3>
-                    <div class="setting">
-                        <label for="public-profile">Make my profile public</label>
-                        <label class="switch">
-                            <input type="checkbox" id="public-profile">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting">
-                        <label for="public-image">Make my image public</label>
-                        <label class="switch">
-                            <input type="checkbox" id="public-image">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
+
+                <!-- Hidden Update Form -->
+                <div id="update-form-container" class="profile-info" style="display: none;">
+                    <h2>Update Your Profile</h2>
+                    <form id="profile-update-form">
+                        <label for="bio">Your Bio</label>
+                        <textarea id="bio" name="bio" rows="4"></textarea>
+
+                        <label for="profile_image_url">Profile Image URL</label>
+                        <input type="text" id="profile_image_url" name="profile_image_url">
+
+                        <div class="setting">
+                            <label for="is_profile_public">Make my profile public</label>
+                            <label class="switch">
+                                <input type="checkbox" id="is_profile_public" name="is_profile_public">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting">
+                            <label for="is_image_public">Make my image public</label>
+                            <label class="switch">
+                                <input type="checkbox" id="is_image_public" name="is_image_public">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Submit for Approval</button>
+                        <p id="updateStatus"></p>
+                    </form>
                 </div>
-                <div id="appointments-list">
+
+                <div id="appointments-list" class="profile-info">
                     <h3>Your Appointments</h3>
                     <!-- Appointments will be listed here -->
                 </div>
-                <div id="events-list">
+                <div id="events-list" class="profile-info">
                     <h3>Your Event Bookings</h3>
                     <!-- Events will be listed here -->
                 </div>
@@ -72,48 +86,43 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Side Nav
-            var menuBtn = document.getElementById("menuBtn")
-            var sideNav = document.getElementById("sideNav")
-            var menu = document.getElementById("menu")
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
 
-            sideNav.style.right = "-250px";
-
-            menuBtn.onclick = function(){
-                if(sideNav.style.right == "-250px"){
-                    sideNav.style.right = "0";
-                    menu.src = "images/close.png";
-                }
-                else{
-                    sideNav.style.right = "-250px";
-                    menu.src = "images/menu-1.png";
-                }
+            if (!email) {
+                document.body.innerHTML = '<h1>Error: No user email provided. Please <a href="login.html">log in</a> again.</h1>';
+                return;
             }
 
-            // --- Profile Data Fetching and Display ---
+            // --- Element References ---
+            const profileNameHeader = document.getElementById('profile-name-header');
+            const profileNameSidebar = document.getElementById('profile-name-sidebar');
+            const profilePic = document.getElementById('profile-pic');
+            const profileBio = document.getElementById('profile-bio');
+            const appointmentsList = document.getElementById('appointments-list');
+            const eventsList = document.getElementById('events-list');
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+            const updateFormContainer = document.getElementById('update-form-container');
+            const updateForm = document.getElementById('profile-update-form');
+            const updateStatus = document.getElementById('updateStatus');
 
-            // Function to fetch profile data
+            // --- Data Fetching ---
             async function fetchProfileData() {
                 try {
-                    const response = await fetch('/api/profile'); // Assumes a backend endpoint
-                    if (!response.ok) {
-                        throw new Error('Could not fetch profile data.');
-                    }
+                    const response = await fetch(`/api/profile?email=${email}`);
+                    if (!response.ok) throw new Error('Could not fetch profile data.');
                     const data = await response.json();
-                    updateProfile(data);
+                    updateProfileDisplay(data);
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
-                    // Display an error message to the user
+                    profileBio.textContent = 'Could not load profile data.';
                 }
             }
 
-            // Function to fetch appointments
             async function fetchAppointments() {
                 try {
-                    const response = await fetch('/api/appointments'); // Assumes a backend endpoint
-                    if (!response.ok) {
-                        throw new Error('Could not fetch appointments.');
-                    }
+                    const response = await fetch(`/api/appointments?email=${email}`);
+                    if (!response.ok) throw new Error('Could not fetch appointments.');
                     const data = await response.json();
                     updateAppointments(data);
                 } catch (error) {
@@ -121,13 +130,10 @@
                 }
             }
 
-            // Function to fetch event bookings
             async function fetchEventBookings() {
                 try {
-                    const response = await fetch('/api/events'); // Assumes a backend endpoint
-                    if (!response.ok) {
-                        throw new Error('Could not fetch event bookings.');
-                    }
+                    const response = await fetch(`/api/events?email=${email}`);
+                    if (!response.ok) throw new Error('Could not fetch event bookings.');
                     const data = await response.json();
                     updateEventBookings(data);
                 } catch (error) {
@@ -135,78 +141,109 @@
                 }
             }
 
-            // Function to update the profile display
-            function updateProfile(data) {
-                document.querySelector('.profile-picture').src = data.profile_image_url || 'images/placeholder-profile.png';
-                document.querySelector('.profile-sidebar h3').textContent = data.name;
-                document.querySelector('.profile-info p').textContent = data.bio || 'No bio set.';
-                document.getElementById('public-profile').checked = data.is_profile_public;
-                document.getElementById('public-image').checked = data.is_image_public;
+            // --- UI Updates ---
+            function updateProfileDisplay(data) {
+                profileNameHeader.textContent = `Welcome, ${data.name}`;
+                profileNameSidebar.textContent = data.name;
+                profilePic.src = data.profile_image_url || 'images/placeholder-profile.png';
+                profileBio.textContent = data.bio || 'No bio set. Click "Edit Profile" to add one!';
+                
+                // Populate form with current data
+                updateForm.bio.value = data.bio || '';
+                updateForm.profile_image_url.value = data.profile_image_url || '';
+                updateForm.is_profile_public.checked = data.is_profile_public;
+                updateForm.is_image_public.checked = data.is_image_public;
             }
 
-            // Function to update the appointments list
             function updateAppointments(appointments) {
-                const appointmentsList = document.getElementById('appointments-list');
-                appointmentsList.innerHTML = '<h3>Your Appointments</h3>'; // Clear existing
-                if (appointments.length === 0) {
+                appointmentsList.innerHTML = '<h3>Your Appointments</h3>';
+                if (!appointments || appointments.length === 0) {
                     appointmentsList.innerHTML += '<p>No appointments found.</p>';
                     return;
                 }
                 const ul = document.createElement('ul');
                 appointments.forEach(appt => {
                     const li = document.createElement('li');
-                    li.textContent = `${appt.service} on ${new Date(appt.start_time).toLocaleDateString()}`;
+                    li.textContent = `${appt.service || 'Service'} on ${new Date(appt.start_time).toLocaleString()}`;
                     ul.appendChild(li);
                 });
                 appointmentsList.appendChild(ul);
             }
 
-            // Function to update the event bookings list
             function updateEventBookings(events) {
-                const eventsList = document.getElementById('events-list');
-                eventsList.innerHTML = '<h3>Your Event Bookings</h3>'; // Clear existing
-                if (events.length === 0) {
+                eventsList.innerHTML = '<h3>Your Event Bookings</h3>';
+                if (!events || events.length === 0) {
                     eventsList.innerHTML += '<p>No event bookings found.</p>';
                     return;
                 }
                 const ul = document.createElement('ul');
                 events.forEach(event => {
                     const li = document.createElement('li');
-                    li.textContent = `${event.name} on ${new Date(event.event_date).toLocaleDateString()}`;
+                    li.textContent = `${event.name} on ${new Date(event.event_date).toLocaleString()}`;
                     ul.appendChild(li);
                 });
                 eventsList.appendChild(ul);
             }
 
-            // --- Profile Settings Update ---
+            // --- Event Handlers ---
+            editProfileBtn.addEventListener('click', () => {
+                updateFormContainer.style.display = updateFormContainer.style.display === 'none' ? 'block' : 'none';
+            });
 
-            const publicProfileToggle = document.getElementById('public-profile');
-            const publicImageToggle = document.getElementById('public-image');
+            updateForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                updateStatus.textContent = 'Submitting...';
+                updateStatus.style.color = '#333';
 
-            async function updateSettings() {
-                const settings = {
-                    is_profile_public: publicProfileToggle.checked,
-                    is_image_public: publicImageToggle.checked
+                const formData = new FormData(updateForm);
+                const data = {
+                    email: email,
+                    bio: formData.get('bio'),
+                    profile_image_url: formData.get('profile_image_url'),
+                    is_profile_public: formData.get('is_profile_public') === 'on',
+                    is_image_public: formData.get('is_image_public') === 'on'
                 };
+
                 try {
-                    const response = await fetch('/api/profile/settings', {
+                    const response = await fetch('/api/profile-settings', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(settings)
+                        body: JSON.stringify(data)
                     });
-                    if (!response.ok) {
-                        throw new Error('Failed to update settings.');
-                    }
-                    console.log('Settings updated successfully.');
+
+                    const result = await response.json();
+                    if (!response.ok) throw new Error(result.message || 'Failed to submit.');
+
+                    updateStatus.textContent = 'Update request submitted for approval!';
+                    updateStatus.style.color = 'green';
+                    setTimeout(() => {
+                        updateFormContainer.style.display = 'none';
+                        updateStatus.textContent = '';
+                    }, 3000);
+
                 } catch (error) {
-                    console.error('Error updating settings:', error);
+                    console.error('Error submitting update:', error);
+                    updateStatus.textContent = `Error: ${error.message}`;
+                    updateStatus.style.color = 'red';
+                }
+            });
+
+            // --- Side Nav ---
+            var menuBtn = document.getElementById("menuBtn");
+            var sideNav = document.getElementById("sideNav");
+            var menu = document.getElementById("menu");
+            sideNav.style.right = "-250px";
+            menuBtn.onclick = function(){
+                if(sideNav.style.right == "-250px"){
+                    sideNav.style.right = "0";
+                    menu.src = "images/close.png";
+                } else {
+                    sideNav.style.right = "-250px";
+                    menu.src = "images/menu-1.png";
                 }
             }
 
-            publicProfileToggle.addEventListener('change', updateSettings);
-            publicImageToggle.addEventListener('change', updateSettings);
-
-            // Initial data fetch
+            // --- Initial Data Fetch ---
             fetchProfileData();
             fetchAppointments();
             fetchEventBookings();

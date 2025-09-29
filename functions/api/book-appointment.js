@@ -1,10 +1,20 @@
 // Helper function for consistent JSON responses
+// Helper function for consistent JSON responses
 const jsonResponse = (data, options = {}) => {
     return new Response(JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json', ...options.headers },
         ...options,
     });
 };
+
+// Helper function to hash a password
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 
 // Helper function to get business configuration
 function getBusinessConfig() {
@@ -21,7 +31,7 @@ export async function onRequestPost(context) {
     const { request, env } = context;
 
     try {
-        const { clientName, clientEmail, service, appointmentTime } = await request.json();
+        const { clientName, clientEmail, service, appointmentTime, password } = await request.json();
 
         if (!clientName || !clientEmail || !service || !appointmentTime) {
             return jsonResponse({ message: 'Missing required fields.' }, { status: 400 });
@@ -33,12 +43,16 @@ export async function onRequestPost(context) {
         if (results.length > 0) {
             client = results[0];
         } else {
-            // Create a new client with a unique referral code and a placeholder password
+            // If client is new, password is required
+            if (!password) {
+                return jsonResponse({ message: 'Password is required for new clients.' }, { status: 400 });
+            }
+
+            // Create a new client with a unique referral code and a hashed password
             const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
-            // In a real app, you would hash this password. For now, a random UUID is a secure placeholder.
-            const placeholderPassword = crypto.randomUUID(); 
+            const hashedPassword = await hashPassword(password);
             const { meta } = await env.DB.prepare('INSERT INTO Clients (name, email, password, referral_code) VALUES (?, ?, ?, ?);')
-                .bind(clientName, clientEmail, placeholderPassword, referralCode)
+                .bind(clientName, clientEmail, hashedPassword, referralCode)
                 .run();
             client = { id: meta.last_row_id };
         }

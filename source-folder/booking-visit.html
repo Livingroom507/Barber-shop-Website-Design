@@ -59,7 +59,12 @@
                 <label for="clientEmail">Your Email:</label>
                 <input type="email" id="clientEmail" name="clientEmail" required>
 
-                <label for="service">Select Service:</label>
+                <div id="password-creation-section" style="display: none;">
+                    <label for="password">Create Password:</label>
+                    <input type="password" id="password" name="password">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword">
+                </div>
                 <select id="service" name="service" required>
                     <option value="">-- Choose a service --</option>
                     <option value="Hair Styling">Hair Styling</option>
@@ -114,7 +119,7 @@
     </div>
 </section>
 
-<script>
+    <script>
     // ... existing menu and smooth scroll script ...
     var menuBtn = document.getElementById("menuBtn")
     var sideNav = document.getElementById("sideNav")
@@ -147,8 +152,33 @@ var scroll = new SmoothScroll('a[href*="#"]', {
     const availableTimesSelect = document.getElementById('availableTimes');
     const appointmentForm = document.getElementById('appointmentForm');
     const bookingMessageEl = document.getElementById('bookingMessage');
+    const clientEmailInput = document.getElementById('clientEmail');
+    const passwordCreationSection = document.getElementById('password-creation-section');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
 
     let currentDisplayDate = new Date(); // Tracks the month currently displayed in the calendar
+
+    clientEmailInput.addEventListener('blur', async () => {
+        const email = clientEmailInput.value;
+        if (!email) return;
+
+        try {
+            const response = await fetch(`/api/check-client?email=${encodeURIComponent(email)}`);
+            const result = await response.json();
+            if (result.exists) {
+                passwordCreationSection.style.display = 'none';
+                passwordInput.required = false;
+                confirmPasswordInput.required = false;
+            } else {
+                passwordCreationSection.style.display = 'block';
+                passwordInput.required = true;
+                confirmPasswordInput.required = true;
+            }
+        } catch (error) {
+            console.error('Error checking client:', error);
+        }
+    });
 
     async function fetchAvailability(dateString) {
         // dateString is already in YYYY-MM-DD format, avoiding timezone issues.
@@ -246,21 +276,27 @@ var scroll = new SmoothScroll('a[href*="#"]', {
         bookingMessageEl.textContent = 'Booking...';
         bookingMessageEl.style.color = 'orange';
 
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            bookingMessageEl.textContent = 'Passwords do not match.';
+            bookingMessageEl.style.color = 'red';
+            return;
+        }
+
         const formData = new FormData(appointmentForm);
         const appointmentTimeValue = formData.get('availableTimes');
 
-        // Add client-side validation to ensure a time is selected.
         if (!appointmentTimeValue) {
             bookingMessageEl.textContent = 'Please select an available time slot.';
             bookingMessageEl.style.color = 'red';
-            return; // Stop the function if no time is chosen
+            return;
         }
 
         const data = {
             clientName: formData.get('clientName'),
             clientEmail: formData.get('clientEmail'),
             service: formData.get('service'),
-            appointmentTime: appointmentTimeValue, // This will be the ISO string
+            appointmentTime: appointmentTimeValue,
+            password: formData.get('password')
         };
 
         try {
@@ -275,7 +311,7 @@ var scroll = new SmoothScroll('a[href*="#"]', {
                 bookingMessageEl.textContent = result.message;
                 bookingMessageEl.style.color = 'green';
                 appointmentForm.reset();
-                // Re-fetch availability for the selected date to update the display
+                passwordCreationSection.style.display = 'none';
                 if (selectedDateInput.value) {
                     fetchAvailability(selectedDateInput.value);
                 }
@@ -292,6 +328,5 @@ var scroll = new SmoothScroll('a[href*="#"]', {
 
     // Initialize calendar on page load
     renderCalendar();
-</script>
-</body>
+</script></body>
 </html>

@@ -69,6 +69,7 @@
     background: #c7a910ff;
     z-index: 2;
     transition: 0.5s;
+    overflow-y: auto;
 }
 nav ul li {
     list-style: none;

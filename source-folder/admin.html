@@ -43,6 +43,7 @@
         <li><a href="raven.html">RAVEN</a></li>
         <li><a href="index.html#Testimonial">TESTIMONIALS</a></li>
         <li><a href="index.html#footer">MEET US</a></li>
+        <li><a id="view-profile-link" href="#">VIEW PROFILE</a></li>
     </ul>
     </nav>
 </div>
@@ -193,7 +194,17 @@
     });
 
     // Script for profile approvals
-    document.addEventListener('DOMContentLoaded', fetchPendingRequests);
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        if (email) {
+            const profileLink = document.getElementById('view-profile-link');
+            if (profileLink) {
+                profileLink.href = `profile.html?email=${email}`;
+            }
+        }
+        fetchPendingRequests();
+    });
 
     async function fetchPendingRequests() {
         const approvalBody = document.getElementById('approvalBody');

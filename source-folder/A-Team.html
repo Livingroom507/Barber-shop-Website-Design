@@ -21,7 +21,7 @@
         </nav>
     </div>
     <div id="menuBtn">
-        <img src="images/menu-1.png" id="menu" alt="">
+        <img src="images/carnavales.2new.png" id="menu" alt="">
     </div>
 
     <section id="ateam-hero">
@@ -110,66 +110,213 @@
             </table>
           </div>
         </div>
+
+        <div id="enroll-guest-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Enroll Guest</h2>
+                <form id="enroll-guest-form">
+                    <input type="hidden" id="enroll-event-id" name="eventId">
+                    <label for="guestName">Guest Name:</label>
+                    <input type="text" id="guestName" name="guestName" required>
+                    <label for="guestEmail">Guest Email:</label>
+                    <input type="email" id="guestEmail" name="guestEmail" required>
+                    <button type="submit">Enroll</button>
+                    <p id="enroll-status"></p>
+                </form>
+            </div>
+        </div>
       </section>
 
       <script>
-        // Modal
-        const modal = document.getElementById('analytics-modal');
-        const closeButton = document.querySelector('.close-button');
-        const cards = document.querySelectorAll('.card');
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
 
-        cards.forEach(card => {
-          card.addEventListener('click', () => {
-            modal.style.display = 'block';
-          });
-        });
+            if (!email) {
+                document.body.innerHTML = '<h1>Error: No user email provided. Please <a href="login.html">log in</a> again.</h1>';
+                return;
+            }
 
-        closeButton.addEventListener('click', () => {
-          modal.style.display = 'none';
-        });
+            const eventCardsContainer = document.querySelector('.event-cards');
 
-        window.addEventListener('click', (event) => {
-          if (event.target == modal) {
-            modal.style.display = 'none';
-          }
-        });
+            async function fetchEvents() {
+                try {
+                    const response = await fetch('/api/events');
+                    if (!response.ok) throw new Error('Could not fetch events.');
+                    const events = await response.json();
+                    displayEvents(events);
+                } catch (error) {
+                    console.error('Error fetching events:', error);
+                    eventCardsContainer.innerHTML = '<p>Could not load events.</p>';
+                }
+            }
 
-        // Filtering
-        const checkboxes = document.querySelectorAll('input[name="day"]');
-        checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('change', () => {
-            const selectedDays = Array.from(checkboxes)
-              .filter(c => c.checked)
-              .map(c => c.value);
+            function displayEvents(events) {
+                eventCardsContainer.innerHTML = ''; // Clear existing cards
+                if (!events || events.length === 0) {
+                    eventCardsContainer.innerHTML = '<p>No events found.</p>';
+                    return;
+                }
 
-            cards.forEach(card => {
-              const cardDay = card.getAttribute('data-day');
-              if (selectedDays.length === 0 || selectedDays.includes(cardDay)) {
-                card.style.display = 'block';
-              } else {
-                card.style.display = 'none';
-              }
+                const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+                events.slice(0, 7).forEach(event => {
+                    const eventDate = new Date(event.event_date);
+                    const dayOfWeek = days[eventDate.getDay()];
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.setAttribute('data-day', dayOfWeek);
+                    card.setAttribute('data-event-id', event.id);
+                    card.innerHTML = `
+                        <h4>${event.name}</h4>
+                        <p>${event.description}</p>
+                        <p><strong>Date:</strong> ${eventDate.toLocaleDateString()}</p>
+                        <p><strong>Location:</strong> ${event.location}</p>
+                        <button class="btn-enroll" data-event-id="${event.id}">Enroll Guest</button>
+                    `;
+                    eventCardsContainer.appendChild(card);
+                });
+
+                // Re-add event listeners for the new cards
+                addCardEventListeners();
+            }
+
+            // Modal
+            const modal = document.getElementById('analytics-modal');
+            const closeButton = document.querySelector('.close-button');
+
+            function addCardEventListeners() {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.addEventListener('click', async (e) => {
+                        if (e.target.classList.contains('btn-enroll')) {
+                            const eventId = e.target.dataset.eventId;
+                            const enrollModal = document.getElementById('enroll-guest-modal');
+                            document.getElementById('enroll-event-id').value = eventId;
+                            enrollModal.style.display = 'block';
+                        } else {
+                            const eventId = card.dataset.eventId;
+                            const eventName = card.querySelector('h4').textContent;
+                            const analyticsModal = document.getElementById('analytics-modal');
+                            const leaderboardBody = analyticsModal.querySelector('tbody');
+                            analyticsModal.querySelector('h2').textContent = `Leaderboard: ${eventName}`;
+                            leaderboardBody.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
+                            analyticsModal.style.display = 'block';
+
+                            try {
+                                const response = await fetch(`/api/leaderboard?eventId=${eventId}`);
+                                const data = await response.json();
+
+                                leaderboardBody.innerHTML = '';
+                                if (data.length === 0) {
+                                    leaderboardBody.innerHTML = '<tr><td colspan="3">No data available.</td></tr>';
+                                    return;
+                                }
+
+                                data.forEach(row => {
+                                    const tr = document.createElement('tr');
+                                    tr.innerHTML = `
+                                        <td>${row.rank}</td>
+                                        <td>${row.affiliateName}</td>
+                                        <td>${row.referralCount}</td>
+                                    `;
+                                    leaderboardBody.appendChild(tr);
+                                });
+                            } catch (error) {
+                                leaderboardBody.innerHTML = '<tr><td colspan="3">Could not load leaderboard.</td></tr>';
+                            }
+                        }
+                    });
+                });
+            }
+
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
             });
-          });
+
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Filtering
+            const checkboxes = document.querySelectorAll('input[name="day"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const selectedDays = Array.from(checkboxes)
+                        .filter(c => c.checked)
+                        .map(c => c.value);
+
+                    const cards = document.querySelectorAll('.card');
+                    cards.forEach(card => {
+                        const cardDay = card.getAttribute('data-day');
+                        if (selectedDays.length === 0 || selectedDays.includes(cardDay)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Side Nav
+            var menuBtn = document.getElementById("menuBtn")
+            var sideNav = document.getElementById("sideNav")
+            var menu = document.getElementById("menu")
+
+            sideNav.style.right = "-250px";
+
+            menuBtn.onclick = function(){
+                if(sideNav.style.right == "-250px"){
+                    sideNav.style.right = "0";
+                    menu.src = "images/close.png";
+                }
+                else{
+                    sideNav.style.right = "-250px";
+                    menu.src = "images/menu-1.png";
+                }
+            }
+
+            const enrollGuestForm = document.getElementById('enroll-guest-form');
+            enrollGuestForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const status = document.getElementById('enroll-status');
+                status.textContent = 'Enrolling guest...';
+
+                const data = {
+                    eventId: document.getElementById('enroll-event-id').value,
+                    guestName: document.getElementById('guestName').value,
+                    guestEmail: document.getElementById('guestEmail').value,
+                    affiliateEmail: email // The email from the URL params
+                };
+
+                try {
+                    const response = await fetch('/api/enroll-guest', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        status.textContent = 'Guest enrolled successfully!';
+                        enrollGuestForm.reset();
+                        setTimeout(() => {
+                            document.getElementById('enroll-guest-modal').style.display = 'none';
+                            status.textContent = '';
+                        }, 2000);
+                    } else {
+                        throw new Error(result.message || 'Enrollment failed.');
+                    }
+                } catch (error) {
+                    status.textContent = `Error: ${error.message}`;
+                }
+            });
+
+            fetchEvents();
         });
-
-        // Side Nav
-        var menuBtn = document.getElementById("menuBtn")
-        var sideNav = document.getElementById("sideNav")
-        var menu = document.getElementById("menu")
-
-        sideNav.style.right = "-250px";
-
-        menuBtn.onclick = function(){
-            if(sideNav.style.right == "-250px"){
-                sideNav.style.right = "0";
-                menu.src = "images/close.png";
-            }
-            else{
-                sideNav.style.right = "-250px";
-                menu.src = "images/menu-1.png";
-            }
-        }
       </script>
 </body>
 </html>

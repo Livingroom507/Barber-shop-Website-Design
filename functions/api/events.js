@@ -12,7 +12,7 @@ export async function onRequestGet(context) {
 
     try {
         const { results } = await env.DB.prepare(
-            'SELECT id, name, description, event_date, location, total_tickets, tickets_sold FROM Events ORDER BY event_date DESC'
+            'SELECT id, name, description, event_date, location, total_tickets, tickets_sold, image_url FROM Events ORDER BY event_date DESC'
         ).all();
         return jsonResponse(results);
     } catch (e) {

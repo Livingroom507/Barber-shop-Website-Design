@@ -17,11 +17,11 @@ export async function onRequest(context) {
         }
 
         // Get the D1 database binding
-        const db = context.env.barbershop_db;
+        const db = context.env.DB;
 
         // Prepare the SQL statement to prevent SQL injection
         const stmt = db.prepare(
-            'INSERT INTO Events (name, description, event_date, location, total_tickets) VALUES (?, ?, ?, ?, ?)'
+            'INSERT INTO Events (name, description, event_date, location, total_tickets, image_url) VALUES (?, ?, ?, ?, ?, ?)'
         );
 
         // Bind the values and execute the statement
@@ -30,7 +30,8 @@ export async function onRequest(context) {
             eventData.description || '', // Use empty string if description is null
             eventData.event_date,
             eventData.location,
-            eventData.total_tickets
+            eventData.total_tickets,
+            eventData.image_url || null // Use null if image_url is not provided
         ).run();
 
         // Return a success response

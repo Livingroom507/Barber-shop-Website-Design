@@ -55,7 +55,8 @@ CREATE TABLE Events (
     event_date TIMESTAMP NOT NULL,
     location TEXT,
     total_tickets INTEGER,
-    tickets_sold INTEGER DEFAULT 0
+    tickets_sold INTEGER DEFAULT 0,
+    image_url TEXT
 );
 
 -- To link clients to the events they've booked

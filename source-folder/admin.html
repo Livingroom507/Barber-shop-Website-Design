@@ -35,14 +35,14 @@
 <div id="sideNav">
     <nav>
     <ul>
-        <li><a href="banner">HOME</a></li>
-        <li><a href="#feature">FEATURES</a></li>
-        <li><a href="#service">SERVICES</a></li>
-        <li><a href="#news-blog">NEWS & EVENTS</a></li> <!-- New Menu Item -->
-        <li><a href="booking-visit.html">BOOKING</a></li> <!-- New Menu Item -->
-        <li><a href="raven.html">RAVEN</a></li> <!-- NEW: Link to Raven Landing Page -->
-        <li><a href="#Testimonial">TESTIMONIALS</a></li>
-        <li><a href="#footer">MEET US</a></li>
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="index.html#feature">FEATURES</a></li>
+        <li><a href="index.html#service">SERVICES</a></li>
+        <li><a href="index.html#news-blog">NEWS & EVENTS</a></li>
+        <li><a href="booking-visit.html">BOOKING</a></li>
+        <li><a href="raven.html">RAVEN</a></li>
+        <li><a href="index.html#Testimonial">TESTIMONIALS</a></li>
+        <li><a href="index.html#footer">MEET US</a></li>
     </ul>
     </nav>
 </div>
@@ -73,6 +73,9 @@
 
             <label for="totalTickets">Total Tickets</label>
             <input type="number" id="totalTickets" name="total_tickets" required>
+
+            <label for="imageUrl">Image URL</label>
+            <input type="text" id="imageUrl" name="image_url">
 
             <button type="submit" class="btn-primary">Create Event</button>
             <p id="formStatus"></p>
@@ -131,6 +134,23 @@
 </section>
 
 <script>
+    var menuBtn = document.getElementById("menuBtn")
+    var sideNav = document.getElementById("sideNav")
+    var menu = document.getElementById("menu")
+
+    sideNav.style.right = "-250px";
+
+    menuBtn.onclick = function(){
+        if(sideNav.style.right == "-250px"){
+            sideNav.style.right = "0";
+            menu.src = "images/close.png"; 
+        }
+        else{
+            sideNav.style.right = "-250px";
+            menu.src = "images/menu.png";
+        }
+    }
+
     document.getElementById('createEventForm').addEventListener('submit', async function(event) {
         event.preventDefault();
         const form = event.target;
@@ -143,7 +163,8 @@
             description: formData.get('description'),
             event_date: formData.get('event_date'),
             location: formData.get('location'),
-            total_tickets: parseInt(formData.get('total_tickets'), 10)
+            total_tickets: parseInt(formData.get('total_tickets'), 10),
+            image_url: formData.get('image_url')
         };
 
         try {

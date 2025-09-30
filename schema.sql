@@ -173,7 +173,7 @@ CREATE TABLE ProfileUpdateRequests (
     FOREIGN KEY (reviewer_id) REFERENCES Clients(id)
 );
 
-CREATE TABLE MembershipRequests (
+CREATE TABLE IF NOT EXISTS MembershipRequests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE MembershipRequests (
     FOREIGN KEY (reviewer_id) REFERENCES Clients(id)
 );
 
-CREATE TABLE RecruitmentApplications (
+CREATE TABLE IF NOT EXISTS RecruitmentApplications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,

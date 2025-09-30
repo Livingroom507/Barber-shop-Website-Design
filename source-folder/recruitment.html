@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment - Hair Care Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="A-Team-style.css"> <!-- Re-using some styles -->
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="sideNav">
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="A-Team.html">A-TEAM</a></li>
+                <li><a href="profile.html">PROFILE</a></li>
+                <li><a href="booking-visit.html">BOOKING</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="menuBtn">
+        <img src="images/menu-1.png" id="menu" alt="">
+    </div>
+
+    <section id="recruitment-hero">
+        <div class="hero-content">
+            <h1>Join Our Team</h1>
+            <p>We are looking for talented individuals to join our team.</p>
+        </div>
+    </section>
+
+    <section id="recruitment-form-section" class="affiliate-dashboard">
+        <div class="contact-form-container">
+            <form id="recruitmentForm">
+                <h2>Application Form</h2>
+                
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="resume_url">Resume URL</label>
+                <input type="text" id="resume_url" name="resume_url" placeholder="Link to your resume (e.g., Google Doc, LinkedIn)" required>
+
+                <label for="photo_id_url">Photo ID URL</label>
+                <input type="text" id="photo_id_url" name="photo_id_url" placeholder="Link to a clear photo of your ID" required>
+
+                <label for="background_check_url">Background Check URL</label>
+                <input type="text" id="background_check_url" name="background_check_url" placeholder="Link to your background check document" required>
+
+                <h3>Social Media Profiles</h3>
+                <label for="facebook_url">Facebook</label>
+                <input type="text" id="facebook_url" name="facebook_url" placeholder="https://facebook.com/your-profile">
+
+                <label for="instagram_url">Instagram</label>
+                <input type="text" id="instagram_url" name="instagram_url" placeholder="https://instagram.com/your-profile">
+
+                <label for="tiktok_url">TikTok</label>
+                <input type="text" id="tiktok_url" name="tiktok_url" placeholder="https://tiktok.com/@your-profile">
+
+                <label for="youtube_url">YouTube</label>
+                <input type="text" id="youtube_url" name="youtube_url" placeholder="https://youtube.com/channel/your-channel">
+
+                <label for="twitter_url">Twitter / X</label>
+                <input type="text" id="twitter_url" name="twitter_url" placeholder="https://twitter.com/your-profile">
+
+                <div class="disclaimer">
+                    <p>By submitting this application, you agree that the information provided will be used for recruitment purposes only. We value your privacy and will not share your information with third parties. Our team will review your application and social media profiles to assess your qualifications.</p>
+                </div>
+
+                <button type="submit" class="btn-primary">Submit Application</button>
+                <p id="recruitmentStatus"></p>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('recruitmentForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const status = document.getElementById('recruitmentStatus');
+            status.textContent = 'Submitting application...';
+
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                resume_url: formData.get('resume_url'),
+                photo_id_url: formData.get('photo_id_url'),
+                background_check_url: formData.get('background_check_url'),
+                facebook_url: formData.get('facebook_url'),
+                instagram_url: formData.get('instagram_url'),
+                tiktok_url: formData.get('tiktok_url'),
+                youtube_url: formData.get('youtube_url'),
+                twitter_url: formData.get('twitter_url'),
+            };
+
+            try {
+                const response = await fetch('/api/recruitment-application', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    status.textContent = 'Application submitted successfully!';
+                    form.reset();
+                } else {
+                    throw new Error(result.message || 'Failed to submit application.');
+                }
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+            }
+        });
+
+        // Side Nav
+        var menuBtn = document.getElementById("menuBtn")
+        var sideNav = document.getElementById("sideNav")
+        var menu = document.getElementById("menu")
+
+        sideNav.style.right = "-250px";
+
+        menuBtn.onclick = function(){
+            if(sideNav.style.right == "-250px"){
+                sideNav.style.right = "0";
+                menu.src = "images/close.png";
+            }
+            else{
+                sideNav.style.right = "-250px";
+                menu.src = "images/menu-1.png";
+            }
+        }
+    </script>
+</body>
+</html>

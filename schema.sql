@@ -172,3 +172,31 @@ CREATE TABLE ProfileUpdateRequests (
     FOREIGN KEY (client_id) REFERENCES Clients(id),
     FOREIGN KEY (reviewer_id) REFERENCES Clients(id)
 );
+
+CREATE TABLE MembershipRequests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    message TEXT,
+    status TEXT DEFAULT 'PENDING', -- PENDING, APPROVED, REJECTED
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TIMESTAMP,
+    reviewer_id INTEGER, -- Admin who reviewed the request
+    FOREIGN KEY (reviewer_id) REFERENCES Clients(id)
+);
+
+CREATE TABLE RecruitmentApplications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    resume_url TEXT,
+    photo_id_url TEXT,
+    background_check_url TEXT,
+    facebook_url TEXT,
+    instagram_url TEXT,
+    tiktok_url TEXT,
+    youtube_url TEXT,
+    twitter_url TEXT,
+    status TEXT DEFAULT 'PENDING', -- PENDING, REVIEWED, CONTACTED
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

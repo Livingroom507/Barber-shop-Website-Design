@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Portfolio - Hair Care Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="A-Team-style.css"> <!-- Re-using some styles -->
+    <link rel="stylesheet" href="css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="sideNav">
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="A-Team.html">A-TEAM</a></li>
+                <li><a href="profile.html">PROFILE</a></li>
+                <li><a href="booking-visit.html">BOOKING</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="menuBtn">
+        <img src="images/menu-1.png" id="menu" alt="">
+    </div>
+
+    <section id="community-hero">
+        <div class="hero-content">
+            <h1>Community Portfolio</h1>
+            <p>Discover the members of our vibrant community.</p>
+        </div>
+    </section>
+
+    <section id="portfolio" class="affiliate-dashboard">
+        <div class="main-content">
+            <div id="profile-cards-container" class="event-cards">
+                <!-- Profile cards will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const profileCardsContainer = document.getElementById('profile-cards-container');
+
+            try {
+                const response = await fetch('/api/public-profiles');
+                const profiles = await response.json();
+
+                if (profiles.length === 0) {
+                    profileCardsContainer.innerHTML = '<p>No public profiles to display.</p>';
+                    return;
+                }
+
+                profiles.forEach(profile => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    const joinDate = new Date(profile.created_at).toLocaleDateString();
+                    const imageUrl = profile.profile_image_url || 'images/placeholder-profile.png';
+
+                    card.innerHTML = `
+                        <img src="${imageUrl}" alt="${profile.name}" style="width:100%; height: 200px; object-fit: cover;">
+                        <div class="article-content">
+                            <h4>${profile.name}</h4>
+                            <p>Member since ${joinDate}</p>
+                        </div>
+                    `;
+                    profileCardsContainer.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error fetching public profiles:', error);
+                profileCardsContainer.innerHTML = '<p>Could not load profiles at this time.</p>';
+            }
+
+            // Side Nav
+            var menuBtn = document.getElementById("menuBtn")
+            var sideNav = document.getElementById("sideNav")
+            var menu = document.getElementById("menu")
+
+            sideNav.style.right = "-250px";
+
+            menuBtn.onclick = function(){
+                if(sideNav.style.right == "-250px"){
+                    sideNav.style.right = "0";
+                    menu.src = "images/close.png";
+                }
+                else{
+                    sideNav.style.right = "-250px";
+                    menu.src = "images/menu-1.png";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

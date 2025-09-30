@@ -39,9 +39,12 @@ export async function onRequestPost(context) {
 
         // 1. Find or create the client
         let client;
-        const { results } = await env.DB.prepare('SELECT id FROM Clients WHERE email = ?').bind(clientEmail).all();
+        const { results } = await env.DB.prepare('SELECT id, role FROM Clients WHERE email = ?').bind(clientEmail).all();
         if (results.length > 0) {
             client = results[0];
+            if (client.role === 'USER') {
+                await env.DB.prepare('UPDATE Clients SET role = \'CLIENT\' WHERE id = ?').bind(client.id).run();
+            }
         } else {
             // If client is new, password is required
             if (!password) {
@@ -51,7 +54,7 @@ export async function onRequestPost(context) {
             // Create a new client with a unique referral code and a hashed password
             const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
             const hashedPassword = await hashPassword(password);
-            const { meta } = await env.DB.prepare('INSERT INTO Clients (name, email, password, referral_code) VALUES (?, ?, ?, ?);')
+            const { meta } = await env.DB.prepare('INSERT INTO Clients (name, email, password, referral_code, role) VALUES (?, ?, ?, ?, \'CLIENT\');')
                 .bind(clientName, clientEmail, hashedPassword, referralCode)
                 .run();
             client = { id: meta.last_row_id };

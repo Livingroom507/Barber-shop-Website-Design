@@ -169,18 +169,18 @@
     <section id="raven-contact">
         <div class="title-text">
             <p>STAY CONNECTED</p>
-            <h1>Join the Raven Community</h1>
+            <h1>Request to Join the Raven Community</h1>
         </div>
         <div class="contact-form-container">
-            <p>Be the first to know about exclusive offers, new styles, and special events!</p>
-            <form id="leadCaptureForm">
+            <p>Submit your information to be considered for membership. Requests are reviewed by our admin team.</p>
+            <form id="membershipRequestForm">
                 <label for="leadName" class="sr-only">Your Name</label>
                 <input type="text" id="leadName" name="name" placeholder="Your Name" required>
                 <label for="leadEmail" class="sr-only">Your Email</label>
                 <input type="email" id="leadEmail" name="email" placeholder="Your Email" required>
                 <label for="leadMessage" class="sr-only">Message</label>
-                <textarea id="leadMessage" name="message" rows="4" placeholder="Optional: Tell us what you're looking for!"></textarea>
-                <button type="submit" class="btn-primary">Sign Me Up!</button>
+                <textarea id="leadMessage" name="message" rows="4" placeholder="Optional: Tell us why you want to join!"></textarea>
+                <button type="submit" class="btn-primary">Submit Request</button>
                 <p id="leadMessageStatus"></p>
             </form>
         </div>
@@ -216,12 +216,11 @@
             speedAsDuration: true
         });
 
-        // Lead Capture Form Submission
-        document.getElementById('leadCaptureForm').addEventListener('submit', async function(event) {
+        document.getElementById('membershipRequestForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const form = event.target;
             const statusMessage = document.getElementById('leadMessageStatus');
-            statusMessage.textContent = 'Submitting...';
+            statusMessage.textContent = 'Submitting request...';
             statusMessage.style.color = 'orange';
 
             const formData = new FormData(form);
@@ -232,7 +231,7 @@
             };
 
             try {
-                const response = await fetch('/api/capture-lead', {
+                const response = await fetch('/api/membership-request', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -242,15 +241,15 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    statusMessage.textContent = 'Thank you for joining the Raven community!';
+                    statusMessage.textContent = 'Your request has been submitted for approval!';
                     statusMessage.style.color = 'green';
                     form.reset();
                 } else {
-                    statusMessage.textContent = `Error: ${result.message || 'Failed to capture lead.'}`;
+                    statusMessage.textContent = `Error: ${result.message || 'Failed to submit request.'}`;
                     statusMessage.style.color = 'red';
                 }
             } catch (error) {
-                console.error('Lead capture error:', error);
+                console.error('Membership request error:', error);
                 statusMessage.textContent = 'An unexpected error occurred.';
                 statusMessage.style.color = 'red';
             }

@@ -195,13 +195,20 @@
 
     // Script for profile approvals
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('Admin page loaded.');
         const urlParams = new URLSearchParams(window.location.search);
         const email = urlParams.get('email');
+        console.log('Email from URL:', email);
         if (email) {
             const profileLink = document.getElementById('view-profile-link');
             if (profileLink) {
                 profileLink.href = `profile.html?email=${email}`;
+                console.log('Profile link HREF set to:', profileLink.href);
+            } else {
+                console.error('Could not find the profile link element.');
             }
+        } else {
+            console.error('No email found in URL.');
         }
         fetchPendingRequests();
     });

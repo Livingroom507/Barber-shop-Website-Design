@@ -43,6 +43,11 @@
                     <p id="profile-bio">This is a public bio. Members can write a short description about themselves here.</p>
                 </div>
 
+                <div id="badges-container" class="profile-info">
+                    <h2>Your Badges</h2>
+                    <!-- Badges will be listed here -->
+                </div>
+
                 <!-- Hidden Update Form -->
                 <div id="update-form-container" class="profile-info" style="display: none;">
                     <h2>Update Your Profile</h2>
@@ -106,13 +111,17 @@
             const updateForm = document.getElementById('profile-update-form');
             const updateStatus = document.getElementById('updateStatus');
 
+            let clientId = null;
+
             // --- Data Fetching ---
             async function fetchProfileData() {
                 try {
                     const response = await fetch(`/api/profile?email=${email}`);
                     if (!response.ok) throw new Error('Could not fetch profile data.');
                     const data = await response.json();
+                    clientId = data.id; // Store the client ID
                     updateProfileDisplay(data);
+                    fetchBadges(); // Fetch badges after getting the client ID
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
                     profileBio.textContent = 'Could not load profile data.';
@@ -138,6 +147,32 @@
                     updateEventBookings(data);
                 } catch (error) {
                     console.error('Error fetching event bookings:', error);
+                }
+            }
+
+            async function fetchBadges() {
+                if (!clientId) return;
+                const badgesContainer = document.getElementById('badges-container');
+                try {
+                    const response = await fetch(`/api/badges?clientId=${clientId}`);
+                    const badges = await response.json();
+                    badgesContainer.innerHTML = '<h2>Your Badges</h2>';
+                    if (badges.length > 0) {
+                        badges.forEach(badge => {
+                            const badgeElement = document.createElement('div');
+                            badgeElement.classList.add('badge-item');
+                            badgeElement.innerHTML = `
+                                <h3>${badge.name}</h3>
+                                <p>${badge.description}</p>
+                            `;
+                            badgesContainer.appendChild(badgeElement);
+                        });
+                    } else {
+                        badgesContainer.innerHTML += '<p>No badges earned yet.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error fetching badges:', error);
+                    badgesContainer.innerHTML += '<p>Could not load badges.</p>';
                 }
             }
 

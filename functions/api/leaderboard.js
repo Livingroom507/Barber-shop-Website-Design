@@ -20,6 +20,7 @@ export async function onRequestGet(context) {
         const db = env.DB;
         const { results } = await db.prepare(`
             SELECT
+                c.id as affiliateId,
                 c.name AS affiliateName,
                 COUNT(rr.id) AS referralCount
             FROM

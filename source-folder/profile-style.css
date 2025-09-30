@@ -171,3 +171,20 @@ input:checked + .slider:before {
     margin-top: 15px;
     font-weight: bold;
 }
+
+#badges-container .badge-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#badges-container .badge-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+#badges-container .badge-item p {
+    margin: 0 0 0 15px;
+    font-size: 1em;
+    color: #555;
+}

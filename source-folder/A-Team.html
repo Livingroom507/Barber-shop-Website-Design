@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="A-Team-style.css">
     <link rel="stylesheet" href="css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: #eee;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
     <div id="sideNav">
@@ -88,6 +98,7 @@
                   <th>Rank</th>
                   <th>Affiliate</th>
                   <th>Referrals</th>
+                  <th>Badges</th>
                 </tr>
               </thead>
               <tbody>
@@ -216,12 +227,15 @@
 
                                 data.forEach(row => {
                                     const tr = document.createElement('tr');
+                                    const badgesCell = document.createElement('td');
                                     tr.innerHTML = `
                                         <td>${row.rank}</td>
                                         <td>${row.affiliateName}</td>
                                         <td>${row.referralCount}</td>
                                     `;
+                                    tr.appendChild(badgesCell);
                                     leaderboardBody.appendChild(tr);
+                                    fetchAndDisplayBadges(row.affiliateId, badgesCell);
                                 });
                             } catch (error) {
                                 leaderboardBody.innerHTML = '<tr><td colspan="3">Could not load leaderboard.</td></tr>';
@@ -229,6 +243,21 @@
                         }
                     });
                 });
+            }
+
+            async function fetchAndDisplayBadges(affiliateId, cell) {
+                try {
+                    const response = await fetch(`/api/badges?clientId=${affiliateId}`);
+                    const badges = await response.json();
+                    if (badges.length > 0) {
+                        cell.innerHTML = badges.map(badge => `<span class="badge">${badge.name}</span>`).join(' ');
+                    } else {
+                        cell.textContent = 'No badges';
+                    }
+                } catch (error) {
+                    console.error('Error fetching badges:', error);
+                    cell.textContent = 'Error';
+                }
             }
 
             closeButton.addEventListener('click', () => {

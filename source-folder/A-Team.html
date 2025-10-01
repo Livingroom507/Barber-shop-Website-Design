@@ -20,6 +20,35 @@
     </style>
 </head>
 <body>
+    <script>
+        (async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+
+            if (!email) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/profile?email=${email}`);
+                if (!response.ok) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const user = await response.json();
+                const authorizedRoles = ['A-TEAM', 'ADMIN'];
+
+                if (!user || !authorizedRoles.includes(user.role)) {
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                console.error('Authorization check failed', error);
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
     <div id="sideNav">
         <nav>
             <ul>

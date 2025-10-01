@@ -11,12 +11,25 @@ export async function onRequestGet(context) {
     const { env } = context;
 
     try {
-        const { results } = await env.DB.prepare(
-            'SELECT name, profile_image_url, created_at FROM Clients WHERE is_profile_public = 1 ORDER BY created_at DESC'
-        ).all();
+        const db = env.DB;
+        const { results } = await db.prepare(`
+            SELECT
+                name,
+                created_at,
+                bio,
+                CASE WHEN is_image_public = 1 THEN profile_image_url ELSE NULL END as profile_image_url
+            FROM
+                Clients
+            WHERE
+                is_profile_public = 1
+            ORDER BY
+                created_at DESC
+        `).all();
+
         return jsonResponse(results);
+
     } catch (e) {
-        console.error("Error fetching public profiles:", e);
-        return jsonResponse({ message: 'An error occurred while fetching profiles.' }, { status: 500 });
+        console.error("Public Profiles Error:", e);
+        return jsonResponse({ message: 'An error occurred while fetching public profiles.' }, { status: 500 });
     }
 }

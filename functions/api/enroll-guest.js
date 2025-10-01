@@ -27,7 +27,7 @@ export async function onRequestPost(context) {
         const db = env.DB;
 
         // 1. Get Affiliate ID
-        const affiliate = await db.prepare('SELECT id FROM Clients WHERE email = ? AND role = \'AFFILIATE\'').bind(affiliateEmail).first();
+        const affiliate = await db.prepare('SELECT id FROM Clients WHERE email = ? AND (role = \'A-TEAM\' OR role = \'ADMIN\')').bind(affiliateEmail).first();
         if (!affiliate) {
             return jsonResponse({ message: 'Affiliate not found.' }, { status: 404 });
         }

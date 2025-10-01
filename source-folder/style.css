@@ -1,4 +1,4 @@
-  *{
+*{
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
@@ -891,4 +891,84 @@ hr{
 }
 #admin-event-creation button:hover {
   background: #444;
+}
+
+/* Basic styles for recruitment page */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+}
+h1, h2, h3 {
+    color: #222;
+}
+.btn-primary {
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+#sideNav {
+    position: fixed;
+    right: -250px;
+    width: 250px;
+    background: #222;
+    transition: right 0.3s;
+    z-index: 1000;
+}
+#sideNav nav ul {
+    list-style: none;
+    padding: 0;
+}
+#sideNav nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 16px;
+}
+#menuBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1001;
+}
+#recruitment-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), #87996f), url('images/Recruitmentimg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+}
+.contact-form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+label {
+    display: block;
+    margin-top: 16px;
+    font-weight: bold;
+}
+input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.disclaimer {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 24px;
 }

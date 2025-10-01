@@ -1,18 +1,19 @@
--- Drop tables if they exist to allow for a clean slate on re-running the schema.
-DROP TABLE IF EXISTS ProfileUpdateRequests;
+-- Drop tables in an order that respects foreign key constraints.
+DROP TABLE IF EXISTS Feedback;
+DROP TABLE IF EXISTS Waitlist;
 DROP TABLE IF EXISTS EventBookings;
+DROP TABLE IF EXISTS ClientBadges;
 DROP TABLE IF EXISTS Affiliates;
+DROP TABLE IF EXISTS ReferralRewards;
+DROP TABLE IF EXISTS AuditLog;
+DROP TABLE IF EXISTS Notifications;
+DROP TABLE IF EXISTS MembershipRequests;
+DROP TABLE IF EXISTS ProfileUpdateRequests;
 DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS Badges;
 DROP TABLE IF EXISTS Events;
 DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS Leads;
-DROP TABLE IF EXISTS ReferralRewards;
-DROP TABLE IF EXISTS Waitlist;
-DROP TABLE IF EXISTS ClientBadges;
-DROP TABLE IF EXISTS Badges;
-DROP TABLE IF EXISTS AuditLog;
-DROP TABLE IF EXISTS Feedback;
-DROP TABLE IF EXISTS Notifications;
 
 -- To store information about your clients/users
 

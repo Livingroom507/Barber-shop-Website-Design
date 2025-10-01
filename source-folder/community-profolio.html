@@ -42,6 +42,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             const profileCardsContainer = document.getElementById('profile-cards-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const isLoggedIn = urlParams.has('email'); // Simple check for login status
 
             try {
                 const response = await fetch('/api/public-profiles');
@@ -58,13 +60,19 @@
                     const joinDate = new Date(profile.created_at).toLocaleDateString();
                     const imageUrl = profile.profile_image_url || 'images/placeholder-profile.png';
 
-                    card.innerHTML = `
+                    let cardHTML = `
                         <img src="${imageUrl}" alt="${profile.name}" style="width:100%; height: 200px; object-fit: cover;">
                         <div class="article-content">
                             <h4>${profile.name}</h4>
                             <p>Member since ${joinDate}</p>
-                        </div>
                     `;
+
+                    if (isLoggedIn && profile.bio) {
+                        cardHTML += `<p class="bio">${profile.bio}</p>`;
+                    }
+
+                    cardHTML += `</div>`;
+                    card.innerHTML = cardHTML;
                     profileCardsContainer.appendChild(card);
                 });
 

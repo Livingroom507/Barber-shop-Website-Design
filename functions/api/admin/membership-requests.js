@@ -47,11 +47,16 @@ export async function onRequestPost(context) {
             }
 
             // Create a new user
-            const placeholderPassword = await hashPassword(crypto.randomUUID());
+            const newPassword = crypto.randomUUID(); // Generate a secure, random password
+            const hashedPassword = await hashPassword(newPassword);
             const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
-            await db.prepare('INSERT OR IGNORE INTO Clients (name, email, password, role, referral_code) VALUES (?, ?, ?, \'USER\', ?)')
-                .bind(request.name, request.email, placeholderPassword, referralCode)
+            await db.prepare('INSERT OR IGNORE INTO Clients (name, email, password, role, referral_code) VALUES (?, ?, ?, \'MEMBER\', ?)')
+                .bind(request.name, request.email, hashedPassword, referralCode)
                 .run();
+
+            // --- EMAIL SIMULATION ---
+            // In a real application, you would integrate an email service (e.g., SendGrid, Mailgun) here.
+            console.log(`\n--- SIMULATING EMAIL ---\nTo: ${request.email}\nSubject: Welcome to the Raven Community!\n\nYour account has been approved. Here are your login credentials:\nUsername: ${request.email}\nPassword: ${newPassword}\n\nPlease change your password after your first login.\n----------------------\n`);
 
             // Update the request status
             await db.prepare('UPDATE MembershipRequests SET status = \'APPROVED\', reviewed_at = CURRENT_TIMESTAMP, reviewer_id = ? WHERE id = ?')

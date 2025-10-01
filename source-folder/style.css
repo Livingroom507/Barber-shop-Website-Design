@@ -66,7 +66,7 @@
     position: fixed;
     right: -250px;
     top: 0;
-    background: #c7a910ff;
+    background: none;
     z-index: 2;
     transition: 0.5s;
     overflow-y: auto;
@@ -901,7 +901,7 @@ body {
     background: #f9f9f9;
 }
 h1, h2, h3 {
-    color: #222;
+    color: #c7a910ff;
 }
 .btn-primary {
     background: #222;

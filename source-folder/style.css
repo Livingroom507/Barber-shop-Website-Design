@@ -901,7 +901,7 @@ body {
     background: #f9f9f9;
 }
 h1, h2, h3 {
-    color: #fff;
+    color: #222;
 }
 .btn-primary {
     background: #222;
@@ -915,7 +915,7 @@ h1, h2, h3 {
     position: fixed;
     right: -250px;
     width: 250px;
-    background: #c7a910ff;
+    background: #222;
     transition: right 0.3s;
     z-index: 1000;
 }
@@ -924,7 +924,7 @@ h1, h2, h3 {
     padding: 0;
 }
 #sideNav nav ul li a {
-    color: #c5490fff;
+    color: #fff;
     text-decoration: none;
     display: block;
     padding: 16px;

@@ -134,6 +134,32 @@
     </div>
 </section>
 
+<section id="admin-recruitment-approval">
+    <div class="title-text">
+        <p>ADMIN</p>
+        <h1>Approve Recruitment Applications</h1>
+    </div>
+    <div class="approval-container">
+        <table id="recruitmentApprovalTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Resume</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="recruitmentApprovalBody">
+                <!-- Rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <p id="recruitmentApprovalStatus"></p>
+    </div>
+</section>
+
 <section id="admin-credentials">
     <div class="title-text">
         <p>ADMIN</p>
@@ -235,6 +261,7 @@
         }
         fetchPendingRequests();
         fetchPendingMembershipRequests();
+        fetchPendingRecruitmentApplications();
     });
 
     async function fetchPendingRequests() {
@@ -388,6 +415,95 @@
 
         } catch (error) {
             console.error('Error processing membership request:', error);
+            status.textContent = `Error: ${error.message}`;
+            status.style.color = 'red';
+            target.disabled = false;
+        }
+    });
+
+    async function fetchPendingRecruitmentApplications() {
+        const recruitmentApprovalBody = document.getElementById('recruitmentApprovalBody');
+        const recruitmentApprovalStatus = document.getElementById('recruitmentApprovalStatus');
+        recruitmentApprovalStatus.textContent = 'Loading recruitment applications...';
+
+        try {
+            const response = await fetch('/api/admin/recruitment-applications');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const applications = await response.json();
+
+            if (applications.length === 0) {
+                recruitmentApprovalStatus.textContent = 'No pending recruitment applications.';
+                return;
+            }
+
+            recruitmentApprovalBody.innerHTML = ''; // Clear loading message
+            applications.forEach(app => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td>${app.name}</td>
+                    <td>${app.email}</td>
+                    <td><a href="${app.resume_url}" target="_blank">View Resume</a></td>
+                    <td>${app.status}</td>
+                    <td>${new Date(app.created_at).toLocaleString()}</td>
+                    <td>
+                        ${app.status === 'PENDING' ? `
+                        <button class="btn-approve-recruitment" data-application-id="${app.id}">Approve</button>
+                        <button class="btn-reject-recruitment" data-application-id="${app.id}">Reject</button>
+                        ` : ''}
+                    </td>
+                `;
+                recruitmentApprovalBody.appendChild(row);
+            });
+
+            recruitmentApprovalStatus.textContent = ''; // Clear status message
+        } catch (error) {
+            console.error('Error fetching recruitment applications:', error);
+            recruitmentApprovalStatus.textContent = 'Failed to load recruitment applications.';
+            recruitmentApprovalStatus.style.color = 'red';
+        }
+    }
+
+    document.getElementById('recruitmentApprovalBody').addEventListener('click', async function(event) {
+        const target = event.target;
+        const applicationId = target.dataset.applicationId;
+        if (!applicationId) return;
+
+        const action = target.classList.contains('btn-approve-recruitment') ? 'APPROVE' :
+                       target.classList.contains('btn-reject-recruitment') ? 'REJECT' : null;
+
+        if (!action) return;
+
+        const status = document.getElementById('recruitmentApprovalStatus');
+        const adminUserId = 1; // Placeholder - should be replaced with actual admin user ID
+
+        target.disabled = true;
+        status.textContent = 'Processing...';
+
+        try {
+            const response = await fetch('/api/admin/recruitment-applications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ applicationId: parseInt(applicationId, 10), action, adminUserId })
+            });
+
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || 'Failed to process application.');
+
+            status.textContent = result.message;
+            status.style.color = 'green';
+            
+            // Update the row instead of removing it
+            const buttonCell = target.parentElement;
+            buttonCell.innerHTML = '';
+            const statusCell = buttonCell.previousElementSibling;
+            statusCell.textContent = action === 'APPROVE' ? 'APPROVED' : 'REJECTED';
+
+
+        } catch (error) {
+            console.error('Error processing recruitment application:', error);
             status.textContent = `Error: ${error.message}`;
             status.style.color = 'red';
             target.disabled = false;

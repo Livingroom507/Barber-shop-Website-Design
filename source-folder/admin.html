@@ -238,7 +238,45 @@
     });
 
     async function fetchPendingRequests() {
-        // ... (existing code)
+        const approvalBody = document.getElementById('approvalBody');
+        const approvalStatus = document.getElementById('approvalStatus');
+        approvalStatus.textContent = 'Loading profile update requests...';
+
+        try {
+            const response = await fetch('/api/admin/requests');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const requests = await response.json();
+
+            if (requests.length === 0) {
+                approvalStatus.textContent = 'No pending profile update requests.';
+                return;
+            }
+
+            approvalBody.innerHTML = ''; // Clear loading message
+            requests.forEach(req => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${req.id}</td>
+                    <td>${req.client_name}</td>
+                    <td>${req.client_email}</td>
+                    <td><pre>${JSON.stringify(JSON.parse(req.requested_changes), null, 2)}</pre></td>
+                    <td>${new Date(req.created_at).toLocaleString()}</td>
+                    <td>
+                        <button class="btn-approve" data-request-id="${req.id}">Approve</button>
+                        <button class="btn-reject" data-request-id="${req.id}">Reject</button>
+                    </td>
+                `;
+                approvalBody.appendChild(row);
+            });
+
+            approvalStatus.textContent = ''; // Clear status message
+        } catch (error) {
+            console.error('Error fetching profile update requests:', error);
+            approvalStatus.textContent = 'Failed to load profile update requests.';
+            approvalStatus.style.color = 'red';
+        }
     }
 
     async function fetchPendingMembershipRequests() {
@@ -284,7 +322,38 @@
     }
 
     document.getElementById('approvalBody').addEventListener('click', async function(event) {
-        // ... (existing code)
+        const target = event.target;
+        const requestId = target.dataset.requestId;
+        if (!requestId) return;
+
+        if (target.classList.contains('btn-approve')) {
+            const status = document.getElementById('approvalStatus');
+            const adminUserId = 1; // Placeholder - should be replaced with actual admin user ID
+
+            target.disabled = true;
+            status.textContent = 'Processing...';
+
+            try {
+                const response = await fetch('/api/admin/requests', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestId: parseInt(requestId, 10), adminUserId })
+                });
+
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Failed to process request.');
+
+                status.textContent = result.message;
+                status.style.color = 'green';
+                target.closest('tr').remove(); // Remove the row from the table
+
+            } catch (error) {
+                console.error('Error processing profile update request:', error);
+                status.textContent = `Error: ${error.message}`;
+                status.style.color = 'red';
+                target.disabled = false;
+            }
+        }
     });
 
     document.getElementById('membershipApprovalBody').addEventListener('click', async function(event) {

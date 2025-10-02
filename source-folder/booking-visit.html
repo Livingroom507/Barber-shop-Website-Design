@@ -158,6 +158,8 @@ var scroll = new SmoothScroll('a[href*="#"]', {
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
 
+    passwordCreationSection.style.display = 'none'; // Hide password section by default
+
     let currentDisplayDate = new Date(); // Tracks the month currently displayed in the calendar
 
     clientEmailInput.addEventListener('blur', async () => {

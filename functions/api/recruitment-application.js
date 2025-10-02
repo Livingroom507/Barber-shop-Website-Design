@@ -1,7 +1,7 @@
 export async function onRequestPost(context) {
     try {
         const { request, env } = context;
-        const db = env.barbershop_db;
+        const db = env.DB;
         const data = await request.json();
 
         // Basic validation

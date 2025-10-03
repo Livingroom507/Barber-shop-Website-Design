@@ -25,6 +25,39 @@
             font-size: 1em;
             box-sizing: border-box; /* To include padding and border in the width */
         }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .approval-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .approval-card h3 {
+            margin-top: 0;
+        }
+
+        .changes-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .changes-list li {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .changes-list strong {
+            font-weight: bold;
+        }
     </style>
 </head>    
 <body>
@@ -89,24 +122,10 @@
         <p>ADMIN</p>
         <h1>Approve Profile Updates</h1>
     </div>
-    <div class="approval-container">
-        <table id="approvalTable">
-            <thead>
-                <tr>
-                    <th>Request ID</th>
-                    <th>Client Name</th>
-                    <th>Client Email</th>
-                    <th>Requested Changes</th>
-                    <th>Date Submitted</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="approvalBody">
-                <!-- Rows will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-        <p id="approvalStatus"></p>
+    <div id="approvalCardContainer" class="card-container">
+        <!-- Approval cards will be inserted here by JavaScript -->
     </div>
+    <p id="approvalStatus"></p>
 </section>
 
 <section id="admin-membership-approval">
@@ -114,24 +133,10 @@
         <p>ADMIN</p>
         <h1>Approve Membership Requests</h1>
     </div>
-    <div class="approval-container">
-        <table id="membershipApprovalTable">
-            <thead>
-                <tr>
-                    <th>Request ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Message</th>
-                    <th>Date Submitted</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="membershipApprovalBody">
-                <!-- Rows will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-        <p id="membershipApprovalStatus"></p>
+    <div id="membershipApprovalCardContainer" class="card-container">
+        <!-- Membership approval cards will be inserted here by JavaScript -->
     </div>
+    <p id="membershipApprovalStatus"></p>
 </section>
 
 <section id="admin-recruitment-approval">
@@ -139,25 +144,10 @@
         <p>ADMIN</p>
         <h1>Approve Recruitment Applications</h1>
     </div>
-    <div class="approval-container">
-        <table id="recruitmentApprovalTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Resume</th>
-                    <th>Status</th>
-                    <th>Submitted</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="recruitmentApprovalBody">
-                <!-- Rows will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-        <p id="recruitmentApprovalStatus"></p>
+    <div id="recruitmentApprovalCardContainer" class="card-container">
+        <!-- Recruitment approval cards will be inserted here by JavaScript -->
     </div>
+    <p id="recruitmentApprovalStatus"></p>
 </section>
 
 <section id="admin-credentials">
@@ -265,7 +255,7 @@
     });
 
     async function fetchPendingRequests() {
-        const approvalBody = document.getElementById('approvalBody');
+        const approvalCardContainer = document.getElementById('approvalCardContainer');
         const approvalStatus = document.getElementById('approvalStatus');
         approvalStatus.textContent = 'Loading profile update requests...';
 
@@ -281,28 +271,30 @@
                 return;
             }
 
-            approvalBody.innerHTML = ''; // Clear loading message
+            approvalCardContainer.innerHTML = ''; // Clear loading message
             requests.forEach(req => {
-                const row = document.createElement('tr');
+                const card = document.createElement('div');
+                card.className = 'approval-card';
+
                 const changes = JSON.parse(req.requested_changes);
-                let changesHtml = '<ul>';
+                let changesHtml = '<ul class="changes-list">';
                 for (const key in changes) {
                     changesHtml += `<li><strong>${key}:</strong> ${changes[key]}</li>`;
                 }
                 changesHtml += '</ul>';
 
-                row.innerHTML = `
-                    <td>${req.id}</td>
-                    <td>${req.client_name}</td>
-                    <td>${req.client_email}</td>
-                    <td>${changesHtml}</td>
-                    <td>${new Date(req.created_at).toLocaleString()}</td>
-                    <td>
+                card.innerHTML = `
+                    <h3>Request ID: ${req.id}</h3>
+                    <p><strong>Client:</strong> ${req.client_name} (${req.client_email})</p>
+                    <p><strong>Submitted:</strong> ${new Date(req.created_at).toLocaleString()}</p>
+                    <h4>Requested Changes:</h4>
+                    ${changesHtml}
+                    <div>
                         <button class="btn-approve" data-request-id="${req.id}">Approve</button>
                         <button class="btn-reject" data-request-id="${req.id}">Reject</button>
-                    </td>
+                    </div>
                 `;
-                approvalBody.appendChild(row);
+                approvalCardContainer.appendChild(card);
             });
 
             approvalStatus.textContent = ''; // Clear status message
@@ -314,7 +306,7 @@
     }
 
     async function fetchPendingMembershipRequests() {
-        const membershipApprovalBody = document.getElementById('membershipApprovalBody');
+        const membershipApprovalCardContainer = document.getElementById('membershipApprovalCardContainer');
         const membershipApprovalStatus = document.getElementById('membershipApprovalStatus');
         membershipApprovalStatus.textContent = 'Loading membership requests...';
 
@@ -330,21 +322,23 @@
                 return;
             }
 
-            membershipApprovalBody.innerHTML = ''; // Clear loading message
+            membershipApprovalCardContainer.innerHTML = ''; // Clear loading message
             requests.forEach(req => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${req.id}</td>
-                    <td>${req.name}</td>
-                    <td>${req.email}</td>
-                    <td>${req.message}</td>
-                    <td>${new Date(req.created_at).toLocaleString()}</td>
-                    <td>
+                const card = document.createElement('div');
+                card.className = 'approval-card';
+
+                card.innerHTML = `
+                    <h3>Request ID: ${req.id}</h3>
+                    <p><strong>Name:</strong> ${req.name}</p>
+                    <p><strong>Email:</strong> ${req.email}</p>
+                    <p><strong>Message:</strong> ${req.message}</p>
+                    <p><strong>Submitted:</strong> ${new Date(req.created_at).toLocaleString()}</p>
+                    <div>
                         <button class="btn-approve-membership" data-request-id="${req.id}">Approve</button>
                         <button class="btn-reject-membership" data-request-id="${req.id}">Reject</button>
-                    </td>
+                    </div>
                 `;
-                membershipApprovalBody.appendChild(row);
+                membershipApprovalCardContainer.appendChild(card);
             });
 
             membershipApprovalStatus.textContent = ''; // Clear status message
@@ -355,7 +349,54 @@
         }
     }
 
-    document.getElementById('approvalBody').addEventListener('click', async function(event) {
+    async function fetchPendingRecruitmentApplications() {
+        const recruitmentApprovalCardContainer = document.getElementById('recruitmentApprovalCardContainer');
+        const recruitmentApprovalStatus = document.getElementById('recruitmentApprovalStatus');
+        recruitmentApprovalStatus.textContent = 'Loading recruitment applications...';
+
+        try {
+            const response = await fetch('/api/admin/recruitment-applications');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const applications = await response.json();
+
+            if (applications.length === 0) {
+                recruitmentApprovalStatus.textContent = 'No pending recruitment applications.';
+                return;
+            }
+
+            recruitmentApprovalCardContainer.innerHTML = ''; // Clear loading message
+            applications.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'approval-card';
+
+                card.innerHTML = `
+                    <h3>Application ID: ${app.id}</h3>
+                    <p><strong>Name:</strong> ${app.name}</p>
+                    <p><strong>Email:</strong> ${app.email}</p>
+                    <p><strong>Resume:</strong> <a href="${app.resume_url}" target="_blank">View Resume</a></p>
+                    <p><strong>Status:</strong> ${app.status}</p>
+                    <p><strong>Submitted:</strong> ${new Date(app.created_at).toLocaleString()}</p>
+                    <div>
+                        ${app.status === 'PENDING' ? `
+                        <button class="btn-approve-recruitment" data-application-id="${app.id}">Approve</button>
+                        <button class="btn-reject-recruitment" data-application-id="${app.id}">Reject</button>
+                        ` : ''}
+                    </div>
+                `;
+                recruitmentApprovalCardContainer.appendChild(card);
+            });
+
+            recruitmentApprovalStatus.textContent = ''; // Clear status message
+        } catch (error) {
+            console.error('Error fetching recruitment applications:', error);
+            recruitmentApprovalStatus.textContent = 'Failed to load recruitment applications.';
+            recruitmentApprovalStatus.style.color = 'red';
+        }
+    }
+
+    document.getElementById('approvalCardContainer').addEventListener('click', async function(event) {
         const target = event.target;
         const requestId = target.dataset.requestId;
         if (!requestId) return;
@@ -379,7 +420,7 @@
 
                 status.textContent = result.message;
                 status.style.color = 'green';
-                target.closest('tr').remove(); // Remove the row from the table
+                target.closest('.approval-card').remove(); // Remove the card from the container
 
             } catch (error) {
                 console.error('Error processing profile update request:', error);
@@ -390,7 +431,7 @@
         }
     });
 
-    document.getElementById('membershipApprovalBody').addEventListener('click', async function(event) {
+    document.getElementById('membershipApprovalCardContainer').addEventListener('click', async function(event) {
         const target = event.target;
         const requestId = target.dataset.requestId;
         if (!requestId) return;
@@ -418,7 +459,7 @@
 
             status.textContent = result.message;
             status.style.color = 'green';
-            target.closest('tr').remove(); // Remove the row from the table
+            target.closest('.approval-card').remove(); // Remove the card from the container
 
         } catch (error) {
             console.error('Error processing membership request:', error);
@@ -428,52 +469,7 @@
         }
     });
 
-    async function fetchPendingRecruitmentApplications() {
-        const recruitmentApprovalBody = document.getElementById('recruitmentApprovalBody');
-        const recruitmentApprovalStatus = document.getElementById('recruitmentApprovalStatus');
-        recruitmentApprovalStatus.textContent = 'Loading recruitment applications...';
-
-        try {
-            const response = await fetch('/api/admin/recruitment-applications');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const applications = await response.json();
-
-            if (applications.length === 0) {
-                recruitmentApprovalStatus.textContent = 'No pending recruitment applications.';
-                return;
-            }
-
-            recruitmentApprovalBody.innerHTML = ''; // Clear loading message
-            applications.forEach(app => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${app.id}</td>
-                    <td>${app.name}</td>
-                    <td>${app.email}</td>
-                    <td><a href="${app.resume_url}" target="_blank">View Resume</a></td>
-                    <td>${app.status}</td>
-                    <td>${new Date(app.created_at).toLocaleString()}</td>
-                    <td>
-                        ${app.status === 'PENDING' ? `
-                        <button class="btn-approve-recruitment" data-application-id="${app.id}">Approve</button>
-                        <button class="btn-reject-recruitment" data-application-id="${app.id}">Reject</button>
-                        ` : ''}
-                    </td>
-                `;
-                recruitmentApprovalBody.appendChild(row);
-            });
-
-            recruitmentApprovalStatus.textContent = ''; // Clear status message
-        } catch (error) {
-            console.error('Error fetching recruitment applications:', error);
-            recruitmentApprovalStatus.textContent = 'Failed to load recruitment applications.';
-            recruitmentApprovalStatus.style.color = 'red';
-        }
-    }
-
-    document.getElementById('recruitmentApprovalBody').addEventListener('click', async function(event) {
+    document.getElementById('recruitmentApprovalCardContainer').addEventListener('click', async function(event) {
         const target = event.target;
         const applicationId = target.dataset.applicationId;
         if (!applicationId) return;

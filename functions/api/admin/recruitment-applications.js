@@ -1,3 +1,5 @@
+import { sendEmail } from '../email';
+
 // Helper function for consistent JSON responses
 const jsonResponse = (data, options = {}) => {
     return new Response(JSON.stringify(data), {
@@ -71,15 +73,21 @@ async function handlePostApproval({ request, env }) {
                 await db.prepare("UPDATE Clients SET role = 'A-TEAM' WHERE id = ?").bind(client.id).run();
             } else {
                 // Create a new client
-                const tempPassword = Math.random().toString(36).slice(-8); // Generate a random password
-                // In a real app, you would email this password to the user.
-                console.log(`Generated temporary password for ${application.email}: ${tempPassword}`);
-                
-                // You should hash the password before storing it.
-                // For simplicity, we are storing it as plain text.
+                const tempPassword = Math.random().toString(36).slice(-8);
+                const hashedPassword = await hashPassword(tempPassword);
+
                 await db.prepare(
                     "INSERT INTO Clients (name, email, password, role) VALUES (?, ?, ?, 'A-TEAM')"
-                ).bind(application.name, application.email, tempPassword).run();
+                ).bind(application.name, application.email, hashedPassword).run();
+
+                // Send welcome email
+                await sendEmail({
+                    to: application.email,
+                    from: 'no-reply@yourdomain.com', // Replace with your sending email address
+                    subject: 'Welcome to the A-Team!',
+                    text: `Welcome! Your temporary password is ${tempPassword}. Please log in and change it.`,
+                    html: `<p>Welcome! Your temporary password is <strong>${tempPassword}</strong>. Please log in and change it.</p>`
+                });
             }
 
             // 3. Mark the application as APPROVED
@@ -104,4 +112,11 @@ async function handlePostApproval({ request, env }) {
         console.error("Error processing application:", e);
         return jsonResponse({ message: 'Failed to process application.' }, { status: 500 });
     }
+}
+
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }

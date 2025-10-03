@@ -284,11 +284,18 @@
             approvalBody.innerHTML = ''; // Clear loading message
             requests.forEach(req => {
                 const row = document.createElement('tr');
+                const changes = JSON.parse(req.requested_changes);
+                let changesHtml = '<ul>';
+                for (const key in changes) {
+                    changesHtml += `<li><strong>${key}:</strong> ${changes[key]}</li>`;
+                }
+                changesHtml += '</ul>';
+
                 row.innerHTML = `
                     <td>${req.id}</td>
                     <td>${req.client_name}</td>
                     <td>${req.client_email}</td>
-                    <td><pre>${JSON.stringify(JSON.parse(req.requested_changes), null, 2)}</pre></td>
+                    <td>${changesHtml}</td>
                     <td>${new Date(req.created_at).toLocaleString()}</td>
                     <td>
                         <button class="btn-approve" data-request-id="${req.id}">Approve</button>

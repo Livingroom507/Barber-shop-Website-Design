@@ -96,7 +96,7 @@ async function handlePostApproval({ request, env }) {
                 "UPDATE RecruitmentApplications SET status = 'APPROVED' WHERE id = ?"
             ).bind(applicationId).run();
 
-            return jsonResponse({ message: 'Application approved successfully.', mailgunInfo: mailgunResponse });
+            return jsonResponse({ message: 'Application approved successfully.' });
 
         } else if (action === 'REJECT') {
             // Mark the application as REJECTED
@@ -111,7 +111,7 @@ async function handlePostApproval({ request, env }) {
 
     } catch (e) {
         console.error("Error processing application:", e);
-        return jsonResponse({ message: 'Failed to process application.', error: e.message }, { status: 500 });
+        return jsonResponse({ message: 'Failed to process application.' }, { status: 500 });
     }
 }
 

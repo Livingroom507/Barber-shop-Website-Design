@@ -493,15 +493,9 @@
             });
 
             const result = await response.json();
-            if (!response.ok) {
-                throw new Error(result.error || result.message || 'Failed to process application.');
-            }
+            if (!response.ok) throw new Error(result.message || 'Failed to process application.');
 
-            let successMsg = result.message;
-            if (result.mailgunInfo) {
-                successMsg += ` (Mailgun: ${JSON.stringify(result.mailgunInfo)})`;
-            }
-            status.textContent = successMsg;
+            status.textContent = result.message;
             status.style.color = 'green';
             
             // Update the row instead of removing it

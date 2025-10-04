@@ -66,11 +66,16 @@ async function handlePostApproval({ request, env }) {
                 return jsonResponse({ message: 'Pending application not found or already handled.' }, { status: 404 });
             }
 
+            let mailgunResponse = null;
+
             // 2. Check if client exists, if not create one
             let client = await db.prepare("SELECT id FROM Clients WHERE email = ?").bind(application.email).first();
             if (client) {
                 // Update existing client's role
                 await db.prepare("UPDATE Clients SET role = 'A-TEAM' WHERE id = ?").bind(client.id).run();
+                // Optionally, send a notification email that their role has been updated
+                // For now, we simulate a successful response as no email is sent for existing clients in this path.
+                mailgunResponse = { message: 'Client role updated, no new email sent.' };
             } else {
                 // Create a new client
                 const tempPassword = Math.random().toString(36).slice(-8);
@@ -81,7 +86,7 @@ async function handlePostApproval({ request, env }) {
                 ).bind(application.name, application.email, hashedPassword).run();
 
                 // Send welcome email
-                const mailgunResponse = await sendEmail({
+                mailgunResponse = await sendEmail({
                     to: application.email,
                     from: `postmaster@${env.MAILGUN_DOMAIN}`,
                     subject: 'Welcome to the A-Team!',

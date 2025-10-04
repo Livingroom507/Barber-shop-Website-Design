@@ -1,4 +1,4 @@
-export async function sendEmail({ to, from, subject, text, html }) {
+export async function sendEmail({ to, from, subject, text, html, env }) {
   // These should be stored securely, e.g., as environment variables
   const apiKey = env.MAILGUN_API_KEY;
   const domain = env.MAILGUN_DOMAIN;

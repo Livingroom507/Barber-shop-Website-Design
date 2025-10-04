@@ -83,10 +83,11 @@ async function handlePostApproval({ request, env }) {
                 // Send welcome email
                 await sendEmail({
                     to: application.email,
-                    from: 'no-reply@yourdomain.com', // Replace with your sending email address
+                    from: `postmaster@${env.MAILGUN_DOMAIN}`,
                     subject: 'Welcome to the A-Team!',
                     text: `Welcome! Your temporary password is ${tempPassword}. Please log in and change it.`,
-                    html: `<p>Welcome! Your temporary password is <strong>${tempPassword}</strong>. Please log in and change it.</p>`
+                    html: `<p>Welcome! Your temporary password is <strong>${tempPassword}</strong>. Please log in and change it.</p>`,
+                    env: env
                 });
             }
 

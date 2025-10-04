@@ -110,7 +110,7 @@
                     status.textContent = 'Application submitted successfully!';
                     form.reset();
                 } else {
-                    throw new Error(result.message || 'Failed to submit application.');
+                    throw new Error(result.error || result.message || 'Failed to submit application.');
                 }
             } catch (error) {
                 status.textContent = `Error: ${error.message}`;

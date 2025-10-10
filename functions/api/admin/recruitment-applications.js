@@ -59,7 +59,7 @@ async function handlePostApproval({ request, env }) {
         if (action === 'APPROVE') {
             // 1. Fetch the application details
             const application = await db.prepare(
-                "SELECT name, email FROM RecruitmentApplications WHERE id = ? AND status = 'PENDING'"
+                "SELECT name, email, facebook_url, instagram_url, tiktok_url, youtube_url, twitter_url FROM RecruitmentApplications WHERE id = ? AND status = 'PENDING'"
             ).bind(applicationId).first();
 
             if (!application) {
@@ -72,7 +72,7 @@ async function handlePostApproval({ request, env }) {
             let client = await db.prepare("SELECT id FROM Clients WHERE email = ?").bind(application.email).first();
             if (client) {
                 // Update existing client's role
-                await db.prepare("UPDATE Clients SET role = 'A-TEAM' WHERE id = ?").bind(client.id).run();
+                await db.prepare("UPDATE Clients SET role = 'A-TEAM', facebook_url = ?, instagram_url = ?, tiktok_url = ?, youtube_url = ?, twitter_url = ? WHERE id = ?").bind(application.facebook_url, application.instagram_url, application.tiktok_url, application.youtube_url, application.twitter_url, client.id).run();
                 // Optionally, send a notification email that their role has been updated
                 // For now, we simulate a successful response as no email is sent for existing clients in this path.
                 mailgunResponse = { message: 'Client role updated, no new email sent.' };
@@ -82,8 +82,8 @@ async function handlePostApproval({ request, env }) {
                 const hashedPassword = await hashPassword(tempPassword);
 
                 await db.prepare(
-                    "INSERT INTO Clients (name, email, password, role) VALUES (?, ?, ?, 'A-TEAM')"
-                ).bind(application.name, application.email, hashedPassword).run();
+                    "INSERT INTO Clients (name, email, password, role, facebook_url, instagram_url, tiktok_url, youtube_url, twitter_url) VALUES (?, ?, ?, 'A-TEAM', ?, ?, ?, ?, ?)"
+                ).bind(application.name, application.email, hashedPassword, application.facebook_url, application.instagram_url, application.tiktok_url, application.youtube_url, application.twitter_url).run();
 
                 // Send welcome email
                 mailgunResponse = await sendEmail({

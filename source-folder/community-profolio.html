@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="A-Team-style.css"> <!-- Re-using some styles -->
     <link rel="stylesheet" href="css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/logo.png">
 </head>
 <body>
     <div id="sideNav">
@@ -23,6 +24,16 @@
     <div id="menuBtn">
         <img src="images/menu-1.png" id="menu" alt="">
     </div>
+    <section id="raven-hero">
+        <div class="hero-content">
+            <h1>Embrace the Raven Lifestyle</h1>
+            <p>Discover unique styles, exclusive content, and connect with a vibrant community.</p>
+            <div class="hero-buttons">
+                <a href="https://www.facebook.com/share/g/19eoYJfdyQ/?mibextid=NSMWBT" class="btn-primary">Join the Movement</a>
+                <a href="#raven-gallery" class="btn-secondary">Explore More</a>
+            </div>
+        </div>
+    </section>
 
     <section id="community-hero">
         <div class="hero-content">
@@ -71,7 +82,15 @@
                         cardHTML += `<p class="bio">${profile.bio}</p>`;
                     }
 
-                    cardHTML += `</div>`;
+                    cardHTML += `
+                        <div class="social-media-icons">
+                            ${profile.facebook_url ? `<a href="${profile.facebook_url}" target="_blank"><i class="fab fa-facebook"></i></a>` : ''}
+                            ${profile.instagram_url ? `<a href="${profile.instagram_url}" target="_blank"><i class="fab fa-instagram"></i></a>` : ''}
+                            ${profile.tiktok_url ? `<a href="${profile.tiktok_url}" target="_blank"><i class="fab fa-tiktok"></i></a>` : ''}
+                            ${profile.youtube_url ? `<a href="${profile.youtube_url}" target="_blank"><i class="fab fa-youtube"></i></a>` : ''}
+                            ${profile.twitter_url ? `<a href="${profile.twitter_url}" target="_blank"><i class="fab fa-twitter"></i></a>` : ''}
+                        </div>
+                    </div>`;
                     card.innerHTML = cardHTML;
                     profileCardsContainer.appendChild(card);
                 });

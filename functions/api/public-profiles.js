@@ -17,7 +17,12 @@ export async function onRequestGet(context) {
                 name,
                 created_at,
                 bio,
-                CASE WHEN is_image_public = 1 THEN profile_image_url ELSE NULL END as profile_image_url
+                CASE WHEN is_image_public = 1 THEN profile_image_url ELSE NULL END as profile_image_url,
+                facebook_url,
+                instagram_url,
+                tiktok_url,
+                youtube_url,
+                twitter_url
             FROM
                 Clients
             WHERE

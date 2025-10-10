@@ -862,6 +862,7 @@ hr{
     font-size: 20px;
     font-style: italic;
 }
+
 .admin-dashboard, #admin-event-creation {
   background: #f9f9f9;
   border-radius: 8px;
@@ -891,6 +892,55 @@ hr{
 }
 #admin-event-creation button:hover {
   background: #444;
+}
+ #updateCredentialsForm label {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 15px;
+            display: block;
+}
+
+#updateCredentialsForm input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* To include padding and border in the width */
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.approval-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.approval-card h3 {
+    margin-top: 0;
+}
+
+.changes-list {
+    list-style: none;
+    padding: 0;
+}
+
+.changes-list li {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.changes-list strong {
+    font-weight: bold;
 }
 
 /* Basic styles for recruitment page */
@@ -971,4 +1021,13 @@ input[type="text"], input[type="email"] {
     font-size: 0.9em;
     color: #555;
     margin-top: 24px;
+}
+/* Social Media Icons in Footer */
+ .social-media-icons {
+    margin-top: 10px;
+}
+.social-media-icons a {
+    margin-right: 10px;
+    color: #333;
+    font-size: 20px;
 }

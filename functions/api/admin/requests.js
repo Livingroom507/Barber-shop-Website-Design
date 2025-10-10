@@ -72,22 +72,32 @@ async function handlePostApproval({ request, env }) {
         const { client_id, requested_changes } = req;
         const changes = JSON.parse(requested_changes);
 
-        // 2. Apply the changes to the Clients table
-        // Note: This is a simple update. A more robust solution would handle partial updates
-        // and validate the 'changes' object.
+        // 2. Fetch the current client data to use as a base
+        const currentClient = await env.DB.prepare(
+            "SELECT is_profile_public, is_image_public, bio, profile_image_url FROM Clients WHERE id = ?"
+        ).bind(client_id).first();
+
+        if (!currentClient) {
+            return jsonResponse({ message: 'Client to be updated not found.' }, { status: 404 });
+        }
+
+        // 3. Merge the changes onto the current data
+        const updatedData = { ...currentClient, ...changes };
+
+        // 4. Apply the merged changes to the Clients table, converting booleans to integers
         await env.DB.prepare(
             `UPDATE Clients
              SET is_profile_public = ?, is_image_public = ?, bio = ?, profile_image_url = ?
              WHERE id = ?`
         ).bind(
-            changes.is_profile_public,
-            changes.is_image_public,
-            changes.bio,
-            changes.profile_image_url,
+            updatedData.is_profile_public ? 1 : 0,
+            updatedData.is_image_public ? 1 : 0,
+            updatedData.bio,
+            updatedData.profile_image_url,
             client_id
         ).run();
 
-        // 3. Mark the request as APPROVED
+        // 5. Mark the request as APPROVED
         await env.DB.prepare(
             "UPDATE ProfileUpdateRequests SET status = 'APPROVED', reviewed_at = CURRENT_TIMESTAMP, reviewer_id = ? WHERE id = ?"
         ).bind(adminUserId, requestId).run();
@@ -96,6 +106,7 @@ async function handlePostApproval({ request, env }) {
 
     } catch (e) {
         console.error("Error approving request:", e);
-        return jsonResponse({ message: 'Failed to approve request.' }, { status: 500 });
+        // Temporarily return the specific error for debugging
+        return jsonResponse({ message: 'Failed to approve request.', error: e.message }, { status: 500 });
     }
 }

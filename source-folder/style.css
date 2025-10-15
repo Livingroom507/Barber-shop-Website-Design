@@ -1022,6 +1022,66 @@ input[type="text"], input[type="email"] {
     color: #555;
     margin-top: 24px;
 }
+
+/* community styles */
+#raven-hero {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/547287666_727743953553449_4477259921234447522_nFGlobal-Exploree-LVN507-PTY-cover.jpg') no-repeat center center; /* Replace with your Raven specific banner image */
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 20px;
+}
+
+#raven-hero h1 {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 80px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+#raven-hero p {
+    font-size: 24px;
+    margin-bottom: 40px;
+    font-style: italic;
+}
+
+.hero-buttons a {
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 15px;
+    padding: 15px 30px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.hero-buttons a.btn-primary {
+    background-color: #c7a910ff; /* Raven accent color */
+    border-color: #c7a910ff;
+}
+
+.hero-buttons a.btn-primary:hover {
+    background-color: #a0880e;
+    border-color: #a0880e;
+    color: #fff;
+}
+
+.hero-buttons a.btn-secondary:hover {
+    background-color: #fff;
+    color: #333;
+}
+
 /* Social Media Icons in Footer */
  .social-media-icons {
     margin-top: 10px;

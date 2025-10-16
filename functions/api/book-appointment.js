@@ -74,7 +74,33 @@ export async function onRequestPost(context) {
             .bind(client.id, service, startTime.toISOString(), endTime.toISOString())
             .run();
 
-        return jsonResponse({ message: `Appointment confirmed for ${clientName} on ${startTime.toDateString()} at ${startTime.toLocaleTimeString()}.` }, { status: 200 });
+        // Send confirmation email
+        try {
+            const emailHtml = `
+                <h1>Your Appointment is Confirmed!</h1>
+                <p>Hi ${clientName},</p>
+                <p>This is a confirmation for your upcoming appointment.</p>
+                <ul>
+                    <li><strong>Service:</strong> ${service}</li>
+                    <li><strong>Date:</strong> ${startTime.toLocaleDateString()}</li>
+                    <li><strong>Time:</strong> ${startTime.toLocaleTimeString()}</li>
+                </ul>
+                <p>We look forward to seeing you!</p>
+            `;
+            await sendEmail({
+                to: clientEmail,
+                from: 'noreply@yourdomain.com', // Replace with your sender email
+                subject: 'Your Appointment is Confirmed!',
+                text: `Your appointment for ${service} on ${startTime.toLocaleString()} is confirmed.`,
+                html: emailHtml,
+                env: env
+            });
+        } catch (emailError) {
+            console.error("Failed to send confirmation email:", emailError);
+            // Non-critical error: Don't block the booking confirmation, just log the email failure.
+        }
+
+        return jsonResponse({ message: `Appointment confirmed for ${clientName} on ${startTime.toDateString()} at ${startTime.toLocaleTimeString()}. An email confirmation has been sent.` }, { status: 200 });
 
     } catch (e) {
         console.error("Booking Error:", e);

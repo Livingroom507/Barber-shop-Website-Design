@@ -59,10 +59,18 @@
                 const result = await response.json();
                 if (response.ok) {
                     status.textContent = 'Login successful!';
-                    // Redirect based on role, passing email as a query parameter
-                    if (result.role === 'ADMIN') window.location.href = `admin.html?email=${form.email.value}`;
-                    else if (result.role === 'A-TEAM') window.location.href = `A-Team.html?email=${form.email.value}`;
-                    else window.location.href = `profile.html?email=${form.email.value}`;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect_url');
+                    const email = form.email.value;
+
+                    if (redirectUrl) {
+                        window.location.href = `${redirectUrl}?email=${email}`;
+                    } else {
+                        // Fallback to role-based redirection
+                        if (result.role === 'ADMIN') window.location.href = `admin.html?email=${email}`;
+                        else if (result.role === 'A-TEAM') window.location.href = `A-Team.html?email=${email}`;
+                        else window.location.href = `profile.html?email=${email}`;
+                    }
                 } else {
                     status.textContent = result.message || 'Login failed.';
                 }

@@ -1,5 +1,4 @@
 // Helper function for consistent JSON responses
-// Helper function for consistent JSON responses
 const jsonResponse = (data, options = {}) => {
     return new Response(JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json', ...options.headers },

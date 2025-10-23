@@ -46,7 +46,10 @@
                 const user = await response.json();
                 const authorizedRoles = ['A-TEAM', 'ADMIN'];
 
-                if (!user || !authorizedRoles.includes(user.role)) {
+                const userRoles = user.role ? user.role.split(',') : [];
+                const isAuthorized = userRoles.some(role => authorizedRoles.includes(role));
+
+                if (!user || !isAuthorized) {
                     window.location.href = 'login.html';
                 }
             } catch (error) {

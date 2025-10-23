@@ -128,6 +128,7 @@
     var menuBtn = document.getElementById("menuBtn")
     var sideNav = document.getElementById("sideNav")
     var menu = document.getElementById("menu")
+    let currentAdminEmail = ''; // Variable to store the admin's email
 
     sideNav.style.right = "-250px";
 
@@ -190,13 +191,14 @@
         const email = urlParams.get('email');
         console.log('Email from URL:', email);
         if (email) {
+            currentAdminEmail = email; // Store the admin's email
             const profileLink = document.getElementById('view-profile-link');
             if (profileLink) {
                 profileLink.href = `profile.html?email=${email}`;
                 console.log('Profile link HREF set to:', profileLink.href);
             }
         } else {
-            console.error('No email found in URL.');
+            console.error('No email found in URL. Admin actions will fail.');
         }
         fetchPendingRequests();
         fetchPendingMembershipRequests();
@@ -352,7 +354,7 @@
 
         if (target.classList.contains('btn-approve')) {
             const status = document.getElementById('approvalStatus');
-            const adminUserId = 33; // Placeholder - should be replaced with actual admin user ID
+            const adminUserId = currentAdminEmail; 
 
             target.disabled = true;
             status.textContent = 'Processing...';
@@ -369,7 +371,7 @@
 
                 status.textContent = result.message;
                 status.style.color = 'green';
-                target.closest('.approval-card').remove(); // Remove the card from the container
+                target.closest('.approval-card').remove(); 
 
             } catch (error) {
                 console.error('Error processing profile update request:', error);
@@ -391,7 +393,7 @@
         if (!action) return;
 
         const status = document.getElementById('membershipApprovalStatus');
-        const adminUserId = 1; // Placeholder - should be replaced with actual admin user ID
+        const adminUserId = currentAdminEmail; 
 
         target.disabled = true;
         status.textContent = 'Processing...';
@@ -408,7 +410,7 @@
 
             status.textContent = result.message;
             status.style.color = 'green';
-            target.closest('.approval-card').remove(); // Remove the card from the container
+            target.closest('.approval-card').remove(); 
 
         } catch (error) {
             console.error('Error processing membership request:', error);
@@ -429,7 +431,7 @@
         if (!action) return;
 
         const status = document.getElementById('recruitmentApprovalStatus');
-        const adminUserId = 1; // Placeholder - should be replaced with actual admin user ID
+        const adminUserId = currentAdminEmail; 
 
         target.disabled = true;
         status.textContent = 'Processing...';
@@ -453,7 +455,7 @@
             status.textContent = successMsg;
             status.style.color = 'green';
             
-            // Update the row instead of removing it
+            
             const buttonCell = target.parentElement;
             buttonCell.innerHTML = '';
             const statusCell = buttonCell.previousElementSibling;

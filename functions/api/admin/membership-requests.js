@@ -43,6 +43,14 @@ export async function onRequestPost(context) {
 
         const db = env.DB;
 
+        // Fetch the admin's numeric ID from their email
+        const admin = await db.prepare('SELECT id FROM Clients WHERE email = ?').bind(adminUserId).first();
+        if (!admin) {
+            console.error(`Admin user with email ${adminUserId} not found.`);
+            return jsonResponse({ message: 'Admin user not found.' }, { status: 404 });
+        }
+        const adminId = admin.id;
+
         if (action === 'APPROVE') {
             console.log('Action is APPROVE. Fetching membership request...');
             const membershipRequest = await db.prepare('SELECT name, email FROM MembershipRequests WHERE id = ?').bind(requestId).first();
@@ -118,7 +126,7 @@ export async function onRequestPost(context) {
 
             console.log('Updating membership request status to APPROVED...');
             await db.prepare('UPDATE MembershipRequests SET status = \'APPROVED\', reviewed_at = CURRENT_TIMESTAMP, reviewer_id = ? WHERE id = ?')
-                .bind(adminUserId, requestId)
+                .bind(adminId, requestId)
                 .run();
             console.log('Membership request status updated.');
 
@@ -126,7 +134,7 @@ export async function onRequestPost(context) {
 
         } else if (action === 'REJECT') {
             await db.prepare('UPDATE MembershipRequests SET status = \'REJECTED\', reviewed_at = CURRENT_TIMESTAMP, reviewer_id = ? WHERE id = ?')
-                .bind(adminUserId, requestId)
+                .bind(adminId, requestId)
                 .run();
             return jsonResponse({ message: 'Membership request rejected.' });
 

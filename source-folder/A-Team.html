@@ -318,7 +318,7 @@
                     cards.forEach(card => {
                         const cardDay = card.getAttribute('data-day');
                         if (selectedDays.length === 0 || selectedDays.includes(cardDay)) {
-                            card.style.display = 'block';
+                            card.style.display = '';
                         } else {
                             card.style.display = 'none';
                         }

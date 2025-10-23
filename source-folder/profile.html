@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- Hidden Update Form -->
-                <div id="update-form-container" class="profile-info">
+                <div id="update-form-container" class="profile-info" style="display:none;">
                     <h2>Update Your Profile</h2>
                     <form id="profile-update-form">
                         <label for="bio">Your Bio</label>
@@ -110,6 +110,8 @@
             const updateFormContainer = document.getElementById('update-form-container');
             const updateForm = document.getElementById('profile-update-form');
             const updateStatus = document.getElementById('updateStatus');
+
+            updateFormContainer.style.display = 'none';
 
             let clientId = null;
 

@@ -1,4 +1,4 @@
-// /functions/api/admin/membership-requests.js
+import { sendEmail } from '../email';
 
 const jsonResponse = (data, options = {}) => {
     return new Response(JSON.stringify(data), {
@@ -41,22 +41,51 @@ export async function onRequestPost(context) {
         const db = env.DB;
 
         if (action === 'APPROVE') {
-            const request = await db.prepare('SELECT name, email FROM MembershipRequests WHERE id = ?').bind(requestId).first();
-            if (!request) {
+            const membershipRequest = await db.prepare('SELECT name, email FROM MembershipRequests WHERE id = ?').bind(requestId).first();
+            if (!membershipRequest) {
                 return jsonResponse({ message: 'Request not found.' }, { status: 404 });
             }
 
-            // Create a new user
-            const newPassword = crypto.randomUUID(); // Generate a secure, random password
-            const hashedPassword = await hashPassword(newPassword);
-            const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
-            await db.prepare('INSERT OR IGNORE INTO Clients (name, email, password, role, referral_code) VALUES (?, ?, ?, \'MEMBER\', ?)')
-                .bind(request.name, request.email, hashedPassword, referralCode)
-                .run();
+            const existingClient = await db.prepare('SELECT id FROM Clients WHERE email = ?').bind(membershipRequest.email).first();
 
-            // --- EMAIL SIMULATION ---
-            // In a real application, you would integrate an email service (e.g., SendGrid, Mailgun) here.
-            console.log(`\n--- SIMULATING EMAIL ---\nTo: ${request.email}\nSubject: Welcome to the Raven Community!\n\nYour account has been approved. Here are your login credentials:\nUsername: ${request.email}\nPassword: ${newPassword}\n\nPlease change your password after your first login.\n----------------------\n`);
+            if (existingClient) {
+                // User already exists, send a notification
+                if (env.MAILGUN_API_KEY && env.MAILGUN_DOMAIN) {
+                    try {
+                        await sendEmail({
+                            to: membershipRequest.email,
+                            from: `A-TEAM <noreply@${env.MAILGUN_DOMAIN}>`,
+                            subject: 'Raven Community Membership Approved',
+                            text: `Your membership to the Raven Community has been approved. You can log in with your existing credentials.`,
+                            env: env,
+                        });
+                    } catch (emailError) {
+                        console.error("Error sending approval notification email:", emailError);
+                    }
+                }
+            } else {
+                // New user, create account and send welcome email
+                const newPassword = crypto.randomUUID();
+                const hashedPassword = await hashPassword(newPassword);
+                const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
+                await db.prepare('INSERT INTO Clients (name, email, password, role, referral_code) VALUES (?, ?, ?, \'MEMBER\', ?)')
+                    .bind(membershipRequest.name, membershipRequest.email, hashedPassword, referralCode)
+                    .run();
+
+                if (env.MAILGUN_API_KEY && env.MAILGUN_DOMAIN) {
+                    try {
+                        await sendEmail({
+                            to: membershipRequest.email,
+                            from: `A-TEAM <noreply@${env.MAILGUN_DOMAIN}>`,
+                            subject: 'Welcome to the Raven Community!',
+                            text: `Your account has been approved. Here are your login credentials:\nUsername: ${membershipRequest.email}\nPassword: ${newPassword}\n\nPlease change your password after your first login.`,
+                            env: env,
+                        });
+                    } catch (emailError) {
+                        console.error("Error sending welcome email:", emailError);
+                    }
+                }
+            }
 
             // Update the request status
             await db.prepare('UPDATE MembershipRequests SET status = \'APPROVED\', reviewed_at = CURRENT_TIMESTAMP, reviewer_id = ? WHERE id = ?')

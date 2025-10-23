@@ -30,26 +30,49 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
     const { request, env } = context;
+    console.log('Membership approval POST request received.');
 
     try {
         const { requestId, action, adminUserId } = await request.json();
+        console.log(`Processing action: ${action} for request ID: ${requestId}`);
 
         if (!requestId || !action || !adminUserId) {
+            console.error('Missing required fields.');
             return jsonResponse({ message: 'Missing required fields.' }, { status: 400 });
         }
 
         const db = env.DB;
 
         if (action === 'APPROVE') {
+            console.log('Action is APPROVE. Fetching membership request...');
             const membershipRequest = await db.prepare('SELECT name, email FROM MembershipRequests WHERE id = ?').bind(requestId).first();
+            
             if (!membershipRequest) {
+                console.error(`Membership request with ID ${requestId} not found.`);
                 return jsonResponse({ message: 'Request not found.' }, { status: 404 });
             }
+            console.log(`Found request for email: ${membershipRequest.email}`);
 
-            const existingClient = await db.prepare('SELECT id FROM Clients WHERE email = ?').bind(membershipRequest.email).first();
+            console.log('Checking for existing client...');
+            // Fetch role to handle multi-role logic
+            const existingClient = await db.prepare('SELECT id, role FROM Clients WHERE email = ?').bind(membershipRequest.email).first();
 
             if (existingClient) {
-                // User already exists, send a notification
+                console.log(`Client already exists with role(s): ${existingClient.role}`);
+                const roles = existingClient.role ? existingClient.role.split(',') : [];
+                if (!roles.includes('MEMBER')) {
+                    roles.push('MEMBER');
+                    const newRoleString = roles.join(',');
+                    console.log(`Updating client role to: "${newRoleString}"`);
+                    await db.prepare('UPDATE Clients SET role = ? WHERE id = ?')
+                        .bind(newRoleString, existingClient.id)
+                        .run();
+                    console.log('Client role updated successfully.');
+                } else {
+                    console.log('Client is already a MEMBER. No role update needed.');
+                }
+
+                console.log('Sending notification email.');
                 if (env.MAILGUN_API_KEY && env.MAILGUN_DOMAIN) {
                     try {
                         await sendEmail({
@@ -59,19 +82,24 @@ export async function onRequestPost(context) {
                             text: `Your membership to the Raven Community has been approved. You can log in with your existing credentials.`,
                             env: env,
                         });
+                        console.log('Approval notification email sent successfully.');
                     } catch (emailError) {
                         console.error("Error sending approval notification email:", emailError);
                     }
                 }
             } else {
-                // New user, create account and send welcome email
+                console.log('Client does not exist. Creating new client with MEMBER role...');
                 const newPassword = crypto.randomUUID();
                 const hashedPassword = await hashPassword(newPassword);
                 const referralCode = `REF-${Date.now()}${Math.random().toString(36).substring(2, 6)}`;
+                
+                console.log('Inserting new client into database...');
                 await db.prepare('INSERT INTO Clients (name, email, password, role, referral_code) VALUES (?, ?, ?, \'MEMBER\', ?)')
                     .bind(membershipRequest.name, membershipRequest.email, hashedPassword, referralCode)
                     .run();
+                console.log('New client inserted successfully.');
 
+                console.log('Sending welcome email...');
                 if (env.MAILGUN_API_KEY && env.MAILGUN_DOMAIN) {
                     try {
                         await sendEmail({
@@ -81,16 +109,18 @@ export async function onRequestPost(context) {
                             text: `Your account has been approved. Here are your login credentials:\nUsername: ${membershipRequest.email}\nPassword: ${newPassword}\n\nPlease change your password after your first login.`,
                             env: env,
                         });
+                        console.log('Welcome email sent successfully.');
                     } catch (emailError) {
                         console.error("Error sending welcome email:", emailError);
                     }
                 }
             }
 
-            // Update the request status
+            console.log('Updating membership request status to APPROVED...');
             await db.prepare('UPDATE MembershipRequests SET status = \'APPROVED\', reviewed_at = CURRENT_TIMESTAMP, reviewer_id = ? WHERE id = ?')
                 .bind(adminUserId, requestId)
                 .run();
+            console.log('Membership request status updated.');
 
             return jsonResponse({ message: 'Membership request approved.' });
 
@@ -105,7 +135,7 @@ export async function onRequestPost(context) {
         }
 
     } catch (e) {
-        console.error("Membership approval error:", e);
+        console.error("FATAL Membership approval error:", e);
         return jsonResponse({ message: 'An error occurred while processing the request.' }, { status: 500 });
     }
 }
